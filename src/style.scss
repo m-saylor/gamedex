@@ -1,0 +1,157 @@
+body, html {
+    height: 100%;
+  }
+
+  :root {
+    text-size-adjust: 100%;
+  }
+
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+
+  .auth-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .auth-buttons > Button {
+    margin-bottom: 12px;
+  }
+
+  .text-link {
+    font-size: 12px;
+  }
+
+  .auth-links {
+    cursor: pointer;
+  }
+
+  .number-rankings {
+    -webkit-text-stroke-width: 0.75px;
+    -webkit-text-stroke-color: #4d4e53;
+  }
+
+  .results-page {
+    margin: 80px 40px 80px 40px;
+  }
+
+.trending-grid-item:hover ~ div {
+    filter: grayscale(75%)!important;
+}
+
+.blue-gray-filter {
+    mask-image: url(./media/bluegray90.png)!important;
+    mask-size: 100%!important;
+    mask-repeat: no-repeat!important;
+    mask-mode: luminance!important;
+}
+
+.not-gray-on-hover {
+  position: relative;
+  cursor: pointer;
+  filter: blur(0px);
+  transition: filter .3s;
+
+  &:before {
+    content: "";
+    position: absolute;
+    border-radius: 0.5rem;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .6);
+    transition: opacity .3s;
+    opacity: 0;
+    z-index: 2;
+  }
+}
+
+.gray-on-hover {
+  position: relative;
+  cursor: pointer;
+  filter: blur(2.5px);
+  transition: filter .3s;
+
+  &:before {
+    content: "";
+    position: absolute;
+    border-radius: 0.5rem;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .6);
+    transition: opacity .3s;
+    opacity: 1;
+    z-index: 2;
+  }
+}
+
+// footer
+@keyframes wave {
+  from, to {
+    transform: translate(-50%, 0%);
+  }
+  
+  50% {
+    transform: translate(-50%, -20%);
+  }
+}
+
+body {
+  background-color: rgb(10, 10, 10);
+  margin: 0px;
+}
+
+#bubble-wrapper {
+  height: 100%;
+  width: 100%;
+  
+  position: fixed;
+  bottom: 0px;
+  
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bubble {
+  height: max(300px, 30vw);
+  width: max(300px, 30vw);
+  
+  background-color: rgb(104, 211, 145);  
+  border-radius: 100%;
+  
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  
+  animation: wave 2s ease-in-out infinite;
+}
+
+@media(prefers-reduced-motion) {
+  .bubble {
+    animation: none;
+    display: none;
+  }
+}
+
+body {
+  margin-bottom: 100px
+}
+
+html {
+  min-height: 100%;
+}
+
+#footer {
+  margin-top: 100px;
+  width: 100%;
+  height: 100px;
+}
