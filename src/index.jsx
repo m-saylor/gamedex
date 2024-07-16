@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import './style.scss';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ActionTypes } from './actions';
 import rootReducer from './reducers';
 
@@ -13,6 +14,9 @@ const store = configureStore({
   reducer: rootReducer,
 });
 
+// creates react query client
+const queryClient = new QueryClient();
+
 // set state as authenticated if a token was previously saved + available
 const token = localStorage.getItem('token');
 if (token) {
@@ -21,7 +25,9 @@ if (token) {
 
 const root = createRoot(document.getElementById('main'));
 root.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </QueryClientProvider>,
 );
