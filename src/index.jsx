@@ -4,6 +4,7 @@ import './style.scss';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ActionTypes } from './actions';
 import rootReducer from './reducers';
 
@@ -28,6 +29,7 @@ root.render(
   <QueryClientProvider client={queryClient}>
     <Provider store={store}>
       <App />
+      <ReactQueryDevtools />
     </Provider>
   </QueryClientProvider>,
 );

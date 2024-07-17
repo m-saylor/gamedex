@@ -103,3 +103,20 @@ export async function fetchGameReleaseYears(games) {
   });
   return years;
 }
+
+/**
+ * Fetches IGDB information for a game from the trending Twitch tab
+ *
+ * @param {string} query - IGDB API query, as described here https://api-docs.igdb.com/#reference
+ * @returns an array of IGDB game objects
+ */
+export async function fetchGameInfoFromIGDB(twitchGames) {
+  const igdbIds = twitchGames.map((game) => game.igdb_id);
+  const query = `fields name, rating, cover, franchise, genres, summary, release_dates; where id=(${igdbIds.toString()}); limit 100;`;
+
+  const games = await fetchGames(query);
+  const covers = await fetchGameCovers(games);
+  const years = await fetchGameReleaseYears(games);
+
+  return { games, covers, years };
+}
