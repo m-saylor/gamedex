@@ -5,8 +5,8 @@
 <!-- PROJECT DEMO GIF -->
 <br />
 <div align="center">
-  <a href="https://github.com/m-saylor/video-game-tracker">
-    <img src="https://github.com/m-saylor/video-game-tracker/blob/main/GamedexDemo.GIF" alt="demo" width="40%">
+  <a href="https://github.com/madison-nicole/video-game-tracker">
+    <img src="https://github.com/madison-nicole/video-game-tracker/blob/main/GamedexDemo.GIF" alt="demo" width="40%">
   </a>
 
   <p align="center">
@@ -24,7 +24,7 @@ Check out GameDex [here](https://video-game-tracker-m7cr.vercel.app/) !
 
  This repository encompasses the frontend of a fullstack web application.
 
- The backend repository of the app is stored [here](https://github.com/m-saylor/video-game-tracker-api). The current frontend client is pointing to the deployed backend server; thus, you will not need to run it for usage.
+ The backend repository of the app is stored [here](https://github.com/madison-nicole/video-game-tracker-api). The current frontend client is pointing to the deployed backend server; thus, you will not need to run it for usage.
 
 <br>
 
@@ -73,7 +73,7 @@ To get a local copy up and running, follow these steps.
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/m-saylor/video-game-tracker.git
+   git clone https://github.com/madison-nicole/video-game-tracker.git
    ```
 2. Install NPM packages
    ```sh
