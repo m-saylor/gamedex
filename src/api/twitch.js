@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import axios from 'axios';
 
 const TWITCH_CLIENT_ID = 'vdc8zk32y8t1shw13l3upxufjhjdqd';
@@ -30,13 +31,30 @@ export async function getAccessToken() {
 }
 
 export async function getTrendingGames() {
-  const token = localStorage.getItem('twitchToken');
-  const headers = {
+  let token = localStorage.getItem('twitchToken');
+  let headers = {
     Authorization: `Bearer ${token}`,
     'Client-Id': TWITCH_CLIENT_ID,
   };
 
-  const response = await axios.get(TWITCH_TOP_GAMES_URL, { headers });
+  let response;
+  let isInvalidToken = true;
+  let count = 0;
+  while (isInvalidToken && count < 5) {
+    try {
+      headers = {
+        Authorization: `Bearer ${token}`,
+        'Client-Id': TWITCH_CLIENT_ID,
+      };
+      response = await axios.get(TWITCH_TOP_GAMES_URL, { headers });
+      isInvalidToken = false;
+    } catch (error) {
+      localStorage.removeItem('twitchToken');
+      token = await getAccessToken();
+      localStorage.setItem('twitchToken', token);
+    }
+    count += 1;
+  }
   const { cursor } = response.data.pagination;
 
   // Filter non games

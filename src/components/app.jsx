@@ -11,13 +11,12 @@ import Results from './search-results/results';
 import AuthModal from './auth-modal/auth-modal';
 import GameCard from './game/game-card';
 import {
-  clearAuthError, fetchTopRatedGames, fetchTrendingGames, loadUser,
+  clearAuthError, fetchTopRatedGames, loadUser,
 } from '../actions';
 import theme from '../theme/theme';
 import { useUserInfo } from '../hooks/redux-hooks';
 import UserProfile from './user-profile/user-profile';
 import Settings from './user-profile/settings/settings';
-import * as Twitch from '../api/twitch';
 import AuthToaster from './auth-toaster';
 // import Footer from './footer';
 
@@ -53,22 +52,6 @@ export default function App(props) {
   // load top rated games
   useEffect(() => {
     dispatch(fetchTopRatedGames());
-  }, [dispatch]);
-
-  // get trending games on twitch
-  useEffect(() => {
-    async function getTrendingGames() {
-      // Get access token if it isn't stored already
-      let twitchToken = localStorage.getItem('twitchToken');
-      if (!twitchToken) {
-        twitchToken = await Twitch.getAccessToken();
-        localStorage.setItem('twitchToken', twitchToken);
-      }
-      // Fetch trending games
-      dispatch(fetchTrendingGames());
-    }
-
-    getTrendingGames();
   }, [dispatch]);
 
   return (

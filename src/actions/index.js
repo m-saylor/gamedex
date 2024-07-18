@@ -1,7 +1,6 @@
 import * as IGDB from '../api/igdb';
 import { signInSuccess, signUpSuccess } from '../utils/text-utils';
 import * as GameDex from '../api/gamedex';
-import * as Twitch from '../api/twitch';
 
 // keys for actiontypes
 export const ActionTypes = {
@@ -24,8 +23,6 @@ export const ActionTypes = {
   SELECT_GAME: 'SELECT_GAME',
   CLEAR_SELECTED_GAME: 'CLEAR_SELECTED_GAME',
 
-  // Twitch Actions
-  TWITCH_TRENDING: 'TWITCH_TRENDING',
 };
 
 // update game information when clicking the save button
@@ -308,56 +305,6 @@ export function selectGameAndLoadData(game) {
 export function clearSelectedGame() {
   return (dispatch) => {
     dispatch({ type: ActionTypes.CLEAR_SELECTED_GAME });
-  };
-}
-
-// Fetch IGDB games from Twitch trending games
-export function fetchIgdbGamesFromTwitchGames(twitchGames) {
-  return (dispatch) => {
-    const igdbIds = twitchGames.map((game) => game.igdb_id);
-    const query = `fields name, rating, cover, franchise, genres, summary, release_dates; where id=(${igdbIds.toString()}); limit 100;`;
-
-    IGDB.fetchGames(query).then(async (games) => {
-      const covers = await IGDB.fetchGameCovers(games);
-      const years = await IGDB.fetchGameReleaseYears(games);
-      // dispatch a new action type, which will put the search results into the Redux store
-      dispatch({
-        type: ActionTypes.IGDB_TRENDING, payload: { games, covers, years },
-      });
-    }).catch((error) => {
-      // For now, if we get an error, just log it.
-      // Add error handling later
-      console.log('error', error);
-    });
-  };
-}
-
-export function fetchTrendingGames() {
-  return async (dispatch) => {
-    try {
-      const games = await Twitch.getTrendingGames();
-      dispatch({ type: ActionTypes.TWITCH_TRENDING, payload: games });
-      dispatch(fetchIgdbGamesFromTwitchGames(games));
-    } catch (error) {
-      // For now, if we get an error, just log it.
-      // Add error handling later
-      console.log('error', error);
-
-      // Re-auth Twitch and try again
-      try {
-        // Delete old token, attempt to fetch a new token
-        localStorage.removeItem('twitchToken');
-        const twitchToken = await Twitch.getAccessToken();
-        localStorage.setItem('twitchToken', twitchToken);
-
-        // Fetch trending games
-        const games = await Twitch.getTrendingGames();
-        dispatch({ type: ActionTypes.TWITCH_TRENDING, payload: games });
-        dispatch(fetchIgdbGamesFromTwitchGames(games));
-      } catch (err) {
-        console.log('error', err);
-      }
-    }
   };
 }
 
