@@ -9,78 +9,85 @@ import {
   InputGroup, InputRightElement, Button,
 } from '@chakra-ui/react';
 import { Search2Icon } from '@chakra-ui/icons';
-import debounce from 'lodash.debounce';
+// import debounce from 'lodash.debounce';
+import { useQuery } from '@tanstack/react-query';
 import {
-  searchGames, searchGamesPreview, selectGameAndLoadData, clearSearchResults,
+  selectGameAndLoadData, clearSearchResults,
+  searchGames,
 } from '../../actions';
-import { useSearchResultsPreview } from '../../hooks/redux-hooks';
+// import { useSearchResultsPreview } from '../../hooks/redux-hooks';
 import { useOnKeyDown, ENTER_KEY } from '../../hooks/event-hooks';
+import { searchGamesPreviewFromIGDB } from '../../api/igdb';
 
-function SearchBar({ gamesData, onSelectGame }) {
+function SearchBar({
+  searchTerm, setSearchTerm,
+}) {
   // state
-  const [search, setSearch] = useState('');
   const [resultsCache, setResultsCache] = useState([]);
+
+  // queries
+  const resultsPreview = useQuery({ queryKey: ['searchResultsPreview', searchTerm], queryFn: () => searchGamesPreviewFromIGDB(searchTerm), enabled: searchTerm !== undefined });
 
   // hooks
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const resultsPreview = useSearchResultsPreview();
+  // const resultsPreview = useSearchResultsPreview();
 
-  const handleSearchPreview = useCallback(() => {
-    dispatch(searchGamesPreview(search));
-  }, [dispatch, search]);
+  // const handleSearchPreview = useCallback(() => {
+  //   dispatch(searchGamesPreview(searchTerm));
+  // }, [dispatch, searchTerm]);
 
-  // create a new debounced search function
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedSearch = useCallback(debounce(handleSearchPreview, 100), [handleSearchPreview]);
+  // // create a new debounced search function
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // const debouncedSearch = useCallback(debounce(handleSearchPreview, 100), [handleSearchPreview]);
 
   const onSearchButtonClick = useCallback(() => {
-    if (search.length > 0) { // only run if search exists
+    if (searchTerm.length > 0) { // only run if search exists
       // clear previous results
       dispatch(clearSearchResults());
 
       // dispatch new search
-      dispatch(searchGames(search));
+      dispatch(searchGames(searchTerm));
       navigate('/results');
       onClose();
     }
-  }, [dispatch, navigate, onClose, search]);
+  }, [dispatch, navigate, onClose, searchTerm]);
 
   // also search games when the user presses enter
   const searchOnEnter = useOnKeyDown(onSearchButtonClick, ENTER_KEY);
 
   const onInputFocus = useCallback(() => {
-    if (resultsCache.length > 0) {
+    if (resultsCache && resultsCache.length > 0) {
       onOpen();
     }
-  }, [onOpen, resultsCache.length]);
+  }, [onOpen, resultsCache]);
 
   // select game
   const onSelectGamePreview = useCallback((game) => {
     dispatch(selectGameAndLoadData(game));
   }, [dispatch]);
 
-  useEffect(() => {
-    debouncedSearch();
-  }, [debouncedSearch]);
+  // useEffect(() => {
+  //   debouncedSearch();
+  // }, [debouncedSearch]);
 
   useEffect(() => {
     // if we have results, open the popover, and update results cache
-    if (resultsPreview?.length > 0) {
-      setResultsCache(resultsPreview);
+    if (resultsPreview && resultsPreview.length > 0) {
+      setResultsCache(resultsPreview.data);
       onOpen();
       return;
     }
 
     // if the user has cleared the input, close the popover, and update results cache
-    if (search?.length === 0) {
-      setResultsCache(resultsPreview);
+    if (searchTerm?.length === 0) {
+      setResultsCache(resultsPreview.data);
       onClose();
     }
 
     // otherwise, continue displaying the previous search results (stored in results cache)
-  }, [onClose, onOpen, resultsPreview, search?.length]);
+  }, [onClose, onOpen, resultsPreview, searchTerm?.length]);
 
   return (
     <div className="search-bar">
@@ -97,7 +104,7 @@ function SearchBar({ gamesData, onSelectGame }) {
                 variant="outline"
                 width="-moz-min-content"
                 onBlur={onClose}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 onFocus={onInputFocus}
                 onKeyDown={searchOnEnter}
               />
@@ -124,7 +131,7 @@ function SearchBar({ gamesData, onSelectGame }) {
           overflowY="scroll"
           width="230px"
         >
-          {resultsCache.map((result, idx) => {
+          {resultsCache?.map((result, idx) => {
             return (
               <Button
                 borderRadius="0px"

@@ -30,6 +30,7 @@ function setDefaultDarkMode() {
 export default function App(props) {
   // state
   const [accountStatus, setAccountStatus] = useState(true); // true if the user has an account
+  const [searchTerm, setSearchTerm] = useState('');
 
   // hooks
   const dispatch = useDispatch();
@@ -59,7 +60,14 @@ export default function App(props) {
       {setDefaultDarkMode()}
       <BrowserRouter>
         <div>
-          <NavBar accountStatus={accountStatus} setAccountStatus={setAccountStatus} username={username} onOpen={onOpen} />
+          <NavBar
+            accountStatus={accountStatus}
+            searchTerm={searchTerm}
+            setAccountStatus={setAccountStatus}
+            setSearchTerm={setSearchTerm}
+            username={username}
+            onOpen={onOpen}
+          />
           <AuthModal accountStatus={accountStatus} isOpen={isOpen} setAccountStatus={setAccountStatus} onClose={closeAuthModal} />
           <GameCard isOpenAuthModal={isOpen} openAuthModal={onOpen} />
           <Routes>
@@ -67,7 +75,7 @@ export default function App(props) {
             {/* temporary home page as browse games page */}
             <Route element={<BrowseGames />} path="/browse" />
             {/* <Route element={<Game />} path="/games/:gameID" /> */}
-            <Route element={<Results />} path="/results" />
+            <Route element={<Results />} path="/results" searchTerm={searchTerm} />
             <Route element={<UserProfile user={user} username={username} />} path="/:username" />
             <Route element={<RequireAuth> <Settings user={user} username={username} /> </RequireAuth>} path="/:username/settings" />
             <Route element={<FallBack />} path="*" />

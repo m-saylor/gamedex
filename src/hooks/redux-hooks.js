@@ -38,13 +38,6 @@ export function useTopRated() {
 }
 
 /**
- * @returns an object with data for the selected game
- */
-export function useSelectedGame() {
-  return useSelector((reduxState) => reduxState.igdb?.selectedGame);
-}
-
-/**
  * @returns an object with data for the search results
  */
 export function useSearchResults() {

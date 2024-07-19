@@ -105,18 +105,84 @@ export async function fetchGameReleaseYears(games) {
 }
 
 /**
- * Fetches IGDB information for a game from the trending Twitch tab
+ * Fetches game info from IGDB
  *
  * @param {string} query - IGDB API query, as described here https://api-docs.igdb.com/#reference
- * @returns an array of IGDB game objects
+ * @returns an object of games with info from IGDB,
+ * including game name, cover image, and release year
  */
-export async function fetchGameInfoFromIGDB(twitchGames) {
-  const igdbIds = twitchGames.map((game) => game.igdb_id);
-  const query = `fields name, rating, cover, franchise, genres, summary, release_dates; where id=(${igdbIds.toString()}); limit 100;`;
-
+export async function fetchGameInfoFromIGDB(query) {
   const games = await fetchGames(query);
+
+  // Then, fetch game covers and years for the games
+  // Original request only returns IDs for covers and years
   const covers = await fetchGameCovers(games);
   const years = await fetchGameReleaseYears(games);
 
   return { games, covers, years };
+}
+
+/**
+ * Fetches IGDB information for a game from the trending Twitch tab
+ *
+ * @param {array} twitchGames - an array of the trending Twitch games
+ * @returns an object of trending Twitch games with info from IGDB,
+ * including game name, cover image, and release year
+ */
+export async function fetchGameInfoFromTwitchToIGDB(twitchGames) {
+  const igdbIds = twitchGames.map((game) => game.igdb_id);
+  const query = `fields name, rating, cover, franchise, genres, summary, release_dates; where id=(${igdbIds.toString()}); limit 100;`;
+
+  const info = fetchGameInfoFromIGDB(query);
+
+  return info;
+}
+
+/**
+ * Fetches IGDB information for games based on the search term
+ *
+ * @param {array} twitchGames - IGDB API query, as described here https://api-docs.igdb.com/#reference
+ * @returns an array of IGDB game objects
+ */
+export async function searchGamesFromIGDB(searchTerm) {
+  const query = `search "${searchTerm}"; fields name, rating, rating_count, cover, franchise, genres, summary, release_dates; where version_parent = null & rating_count > 0;`;
+
+  const info = fetchGameInfoFromIGDB(query);
+
+  return info;
+}
+
+/**
+ * Fetches a preview of game name for games based on the search term
+ *
+ * @param {array} twitchGames - IGDB API query, as described here https://api-docs.igdb.com/#reference
+ * @returns an array of IGDB game objects
+ */
+export async function searchGamesPreviewFromIGDB(searchTerm) {
+  const query = `search "${searchTerm}"; fields name, rating, cover, franchise, genres, summary, release_dates; where version_parent = null & rating_count > 0;`;
+
+  const games = fetchGames(query);
+
+  return games;
+}
+
+/**
+ *
+ * Fetches game card fields for a single game, including the cover url and release year
+ *
+ * @param {*} igdbId - IGDB game id
+ * @returns game object
+ */
+export async function fetchGameCard(igdbId) {
+  const query = `fields name, rating, cover, franchise, genres, summary, release_dates; where id=${igdbId};`;
+
+  const games = await fetchGames(query);
+  const game = games?.[0];
+
+  const coverUrl = await fetchGameCoverUrl(game.cover);
+  const year = await fetchGameReleaseYear(game.release_dates[0]);
+
+  return {
+    ...game, coverUrl, year, avgRating: game.rating, userRating: undefined,
+  };
 }

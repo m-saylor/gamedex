@@ -3,13 +3,11 @@ import React, { useCallback, useRef, useState } from 'react';
 import {
   Grid, GridItem, Image, Skeleton,
 } from '@chakra-ui/react';
-import { useDispatch } from 'react-redux';
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import { getSpan, TILE_INDEX_TO_GAME_INDEX } from '../../../utils/masonry-utils';
-import { useSelectedGame } from '../../../hooks/redux-hooks';
-import { selectGame } from '../../../actions';
 import { getTrendingGames } from '../../../api/twitch';
-import { fetchGameInfoFromIGDB } from '../../../api/igdb';
+import { fetchGameCard } from '../../../api/igdb';
 
 function getGameStyles(gameIdx, hoveredIdx, modalOpen) {
   if (modalOpen) {
@@ -39,17 +37,25 @@ function TrendingGames() {
   // queries
   const trendingTwitch = useQuery({ queryKey: ['trendingTwitchResults'], queryFn: getTrendingGames });
   const twitchData = trendingTwitch?.data;
+  const igdbIds = twitchData?.map((game) => game.igdb_id);
 
-  const trendingIGDB = useQuery({ queryKey: ['trendingIGDBResults', twitchData], queryFn: () => fetchGameInfoFromIGDB(twitchData), enabled: twitchData !== undefined });
-  const igdbData = trendingIGDB?.data;
-  const games = igdbData?.games;
-  const covers = igdbData?.covers;
-  const years = igdbData?.years;
+  useQueries({
+    queries: igdbIds ? igdbIds.map((igdbId) => {
+      return { queryKey: ['selectedGame', igdbId], queryFn: () => fetchGameCard(igdbId) };
+    }) : [],
+  });
+
+  // const trendingIGDB = useQuery({ queryKey: ['trendingIGDBResults', twitchData], queryFn: () => fetchGameInfoFromTwitchToIGDB(twitchData), enabled: twitchData !== undefined });
+  // const igdbData = trendingIGDB?.data;
+  // const games = igdbData?.games;
+  // const covers = igdbData?.covers;
+  // const years = igdbData?.years;
 
   // hooks
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const hoverTimeoutRef = useRef();
-  const gameModal = useSelectedGame();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedGame = searchParams.get('selected');
 
   // state
   const [hoveredGameIdx, setHoveredGameIdx] = useState(null);
@@ -66,15 +72,16 @@ function TrendingGames() {
   }, []);
 
   const onSelectGame = useCallback((twitchGame) => {
-    const igdbGame = games.find((game) => String(game.id) === String(twitchGame.igdb_id));
-    if (!igdbGame) { return; }
+    setSearchParams({ selected: twitchGame.igdb_id });
+    // const igdbGame = games.find((game) => String(game.id) === String(twitchGame.igdb_id));
+    // if (!igdbGame) { return; }
 
-    const igdbCover = `https:${covers?.[igdbGame?.cover]}`.replace('thumb', 'cover_big');
-    const igdbYear = years[years?.[0]];
-    const igdbRating = igdbGame.rating;
+    // const igdbCover = `https:${covers?.[igdbGame?.cover]}`.replace('thumb', 'cover_big');
+    // const igdbYear = years[years?.[0]];
+    // const igdbRating = igdbGame.rating;
 
-    dispatch(selectGame(igdbGame, igdbCover, igdbYear, igdbRating));
-  }, [covers, dispatch, games, years]);
+    // dispatch(selectGame(igdbGame, igdbCover, igdbYear, igdbRating));
+  }, [setSearchParams]);
 
   function renderTrendingGames() {
     const renderedGames = [];
@@ -83,14 +90,14 @@ function TrendingGames() {
       const span = getSpan(idx);
       const gameIdx = TILE_INDEX_TO_GAME_INDEX[idx];
       const game = twitchData?.[gameIdx];
-      const gameStyles = getGameStyles(gameIdx, hoveredGameIdx, gameModal);
+      const gameStyles = getGameStyles(gameIdx, hoveredGameIdx, selectedGame);
       const isLoading = !game || trendingTwitch.isLoading;
 
       if (game) {
         renderedGames.push(
           <GridItem
             colSpan={span}
-            key={game.igdb_id}
+            key={`${game.igdb_id}-${idx}`}
             rowSpan={span}
             onClick={() => onSelectGame(game)}
             onMouseEnter={() => onMouseEnterGridItem(gameIdx)}

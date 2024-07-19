@@ -4,20 +4,20 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 // import { useLocation } from 'react-router-dom';
 import {
-  // IconButton,
-  Box, Flex, Button, Image,
+  IconButton, Box, Flex, Button, Image,
   useColorModeValue, HStack, useColorMode,
 } from '@chakra-ui/react';
 import {
-  MoonIcon, SunIcon,
-  // BellIcon
+  MoonIcon, SunIcon, BellIcon,
 } from '@chakra-ui/icons';
 import SearchBar from './search-bar';
 import { signoutUser } from '../../actions';
 import { useAuthenticated, useSearchResultsPreview } from '../../hooks/redux-hooks';
 import NavProfileMenu from './nav-profile-menu';
 
-function NavBar({ onOpen, setAccountStatus, username }) {
+function NavBar({
+  onOpen, setAccountStatus, username, searchTerm, setSearchTerm,
+}) {
   // hooks
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -71,14 +71,13 @@ function NavBar({ onOpen, setAccountStatus, username }) {
         <HStack variant="navButtonRow">
           <Flex alignItems="center">
             <HStack spacing={3}>
-              {/* notification button to re-add  */}
-              {/* <IconButton
+              <IconButton
                 aria-label="View notifications"
                 colorScheme="gray"
                 icon={<BellIcon />}
                 size="lg"
                 variant="ghost"
-              /> */}
+              />
             </HStack>
           </Flex>
           <NavProfileMenu handleBrowseGames={handleBrowseGames} handleSettings={handleSettings} handleYourProfile={handleYourProfile} signOut={signOut} username={username} />
@@ -108,7 +107,7 @@ function NavBar({ onOpen, setAccountStatus, username }) {
     //   return null;
     // } else {
     return (
-      <SearchBar gamesData={resultsPreview} />
+      <SearchBar gamesData={resultsPreview} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
     );
   }
 
