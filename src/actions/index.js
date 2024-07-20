@@ -15,14 +15,8 @@ export const ActionTypes = {
   CLEAR_AUTH_ERROR: 'CLEAR_AUTH_ERROR',
 
   // IGDB Actions
-  IGDB_SEARCH_PREVIEW: 'IGDB_SEARCH_PREVIEW',
-  IGDB_SEARCH: 'IGDB_SEARCH',
   IGDB_TOP_RATED: 'IGDB_TOP_RATED',
-  IGDB_TRENDING: 'IGDB_TRENDING',
-
   SELECT_GAME: 'SELECT_GAME',
-  CLEAR_SELECTED_GAME: 'CLEAR_SELECTED_GAME',
-
 };
 
 // update game information when clicking the save button
@@ -56,7 +50,6 @@ export function loadUser() {
   return async (dispatch) => {
     try {
       const user = await GameDex.loadUser();
-      console.log(user);
       if (user) {
         const games = await GameDex.getUserGames(user.username);
         dispatch({ type: ActionTypes.AUTH_USER, payload: undefined });
@@ -211,48 +204,6 @@ export function fetchUserGames(username) {
   };
 }
 
-// Search games preview = quick results for the search bar dropdown
-export function searchGamesPreview(searchTerm) {
-  return (dispatch) => {
-    const query = `search "${searchTerm}"; fields name, rating, cover, franchise, genres, summary, release_dates; where version_parent = null & rating_count > 0;`;
-
-    IGDB.fetchGames(query).then((games) => {
-      // dispatch a new action type, which will put the search results into the Redux store
-      dispatch({ type: ActionTypes.IGDB_SEARCH_PREVIEW, payload: games });
-    }).catch((error) => {
-      // For now, if we get an error, just log it.
-      // Add error handling later
-      console.log('error', error);
-    });
-  };
-}
-
-// Search games = full results for the results page
-export function searchGames(searchTerm) {
-  return async (dispatch) => {
-    // query
-    const query = `search "${searchTerm}"; fields name, rating, rating_count, cover, franchise, genres, summary, release_dates; where version_parent = null & rating_count > 0;`;
-
-    try {
-    // First, request games for the given search term
-      const games = await IGDB.fetchGames(query);
-
-      // Then, fetch game covers and years for the games
-      // Original request only returns IDs for covers and years
-      const covers = await IGDB.fetchGameCovers(games);
-      const years = await IGDB.fetchGameReleaseYears(games);
-      // dispatch a new action type, which will put the search results into the Redux store
-      dispatch({
-        type: ActionTypes.IGDB_SEARCH, payload: { games, covers, years },
-      });
-    } catch (error) {
-      // For now, if we get an error, just log it.
-      // Add error handling later
-      console.log('error', error);
-    }
-  };
-}
-
 // IGDB TOP RATED GAMES ACTION
 export function fetchTopRatedGames() {
   return (dispatch) => {
@@ -281,36 +232,5 @@ export function selectGame(game, coverUrl, year, avgRating, userRating = undefin
         ...game, coverUrl, year, avgRating, userRating,
       },
     });
-  };
-}
-
-export function selectGameAndLoadData(game) {
-  return async (dispatch) => {
-    try {
-      const coverUrl = await IGDB.fetchGameCoverUrl(game.cover);
-      const year = await IGDB.fetchGameReleaseYear(game.release_dates[0]);
-
-      dispatch({
-        type: ActionTypes.SELECT_GAME,
-        payload: {
-          ...game, coverUrl, year, avgRating: game.rating, userRating: undefined,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-}
-
-export function clearSelectedGame() {
-  return (dispatch) => {
-    dispatch({ type: ActionTypes.CLEAR_SELECTED_GAME });
-  };
-}
-
-export function clearSearchResults() {
-  return {
-    type: ActionTypes.IGDB_SEARCH,
-    payload: null,
   };
 }

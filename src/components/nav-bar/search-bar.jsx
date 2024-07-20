@@ -1,7 +1,6 @@
 import React, {
   useState, useCallback, useEffect,
 } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import {
   IconButton, Input, useDisclosure, Popover,
@@ -11,48 +10,28 @@ import {
 import { Search2Icon } from '@chakra-ui/icons';
 // import debounce from 'lodash.debounce';
 import { useQuery } from '@tanstack/react-query';
-import {
-  selectGameAndLoadData, clearSearchResults,
-  searchGames,
-} from '../../actions';
-// import { useSearchResultsPreview } from '../../hooks/redux-hooks';
 import { useOnKeyDown, ENTER_KEY } from '../../hooks/event-hooks';
 import { searchGamesPreviewFromIGDB } from '../../api/igdb';
 
-function SearchBar({
-  searchTerm, setSearchTerm,
-}) {
+function SearchBar() {
   // state
+  const [searchTerm, setSearchTerm] = useState('');
   const [resultsCache, setResultsCache] = useState([]);
 
   // queries
-  const resultsPreview = useQuery({ queryKey: ['searchResultsPreview', searchTerm], queryFn: () => searchGamesPreviewFromIGDB(searchTerm), enabled: searchTerm !== undefined });
+  const searchResultsPreview = useQuery({ queryKey: ['searchResultsPreview', searchTerm], queryFn: () => searchGamesPreviewFromIGDB(searchTerm), enabled: searchTerm !== undefined });
+  const resultsData = searchResultsPreview?.data;
 
   // hooks
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const resultsPreview = useSearchResultsPreview();
-
-  // const handleSearchPreview = useCallback(() => {
-  //   dispatch(searchGamesPreview(searchTerm));
-  // }, [dispatch, searchTerm]);
-
-  // // create a new debounced search function
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // const debouncedSearch = useCallback(debounce(handleSearchPreview, 100), [handleSearchPreview]);
 
   const onSearchButtonClick = useCallback(() => {
     if (searchTerm.length > 0) { // only run if search exists
-      // clear previous results
-      dispatch(clearSearchResults());
-
-      // dispatch new search
-      dispatch(searchGames(searchTerm));
-      navigate('/results');
+      navigate(`/results/?search=${searchTerm}`);
       onClose();
     }
-  }, [dispatch, navigate, onClose, searchTerm]);
+  }, [navigate, onClose, searchTerm]);
 
   // also search games when the user presses enter
   const searchOnEnter = useOnKeyDown(onSearchButtonClick, ENTER_KEY);
@@ -65,29 +44,25 @@ function SearchBar({
 
   // select game
   const onSelectGamePreview = useCallback((game) => {
-    dispatch(selectGameAndLoadData(game));
-  }, [dispatch]);
-
-  // useEffect(() => {
-  //   debouncedSearch();
-  // }, [debouncedSearch]);
+    setSearchTerm({ selected: game.id });
+  }, [setSearchTerm]);
 
   useEffect(() => {
     // if we have results, open the popover, and update results cache
-    if (resultsPreview && resultsPreview.length > 0) {
-      setResultsCache(resultsPreview.data);
+    if (resultsData && resultsData.length > 0) {
+      setResultsCache(resultsData);
       onOpen();
       return;
     }
 
     // if the user has cleared the input, close the popover, and update results cache
     if (searchTerm?.length === 0) {
-      setResultsCache(resultsPreview.data);
+      setResultsCache([]);
       onClose();
     }
 
     // otherwise, continue displaying the previous search results (stored in results cache)
-  }, [onClose, onOpen, resultsPreview, searchTerm?.length]);
+  }, [onClose, onOpen, resultsData, searchTerm?.length]);
 
   return (
     <div className="search-bar">

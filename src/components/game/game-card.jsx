@@ -9,13 +9,15 @@ import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import {
-  addUserGame, clearSelectedGame, deleteUserGame, updateUserGame,
+  addUserGame, deleteUserGame, updateUserGame,
 } from '../../actions';
 import {
   useAuthenticated, useUserGames, useUserInfo,
 } from '../../hooks/redux-hooks';
 import GameCardButtons from './game-card-buttons';
 import { fetchGameCard } from '../../api/igdb';
+
+import { removeSearchParam } from '../../utils/router-utils';
 
 function GameCard({ openAuthModal, isOpenAuthModal }) {
   // hooks
@@ -28,8 +30,6 @@ function GameCard({ openAuthModal, isOpenAuthModal }) {
 
   // query
   const { data: game } = useQuery({ queryKey: ['selectedGame', gameId], queryFn: () => fetchGameCard(gameId), enabled: gameId !== undefined });
-
-  console.log(game?.coverUrl);
 
   // state
   const [userRating, setUserRating] = useState(0);
@@ -64,14 +64,9 @@ function GameCard({ openAuthModal, isOpenAuthModal }) {
   }, [game, userInfo.games]);
 
   const onCloseGame = useCallback(() => {
-    setSearchParams((prevParams) => {
-      const newParams = { ...prevParams };
-      delete newParams.selected;
-      return newParams;
-    });
+    setSearchParams(removeSearchParam('selected'));
     setUserRating(0);
-    dispatch(clearSelectedGame());
-  }, [dispatch, setSearchParams]);
+  }, [setSearchParams]);
 
   // save + log the game
   const onLogGame = useCallback(() => {

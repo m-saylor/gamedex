@@ -12,11 +12,11 @@ import {
 } from '@chakra-ui/icons';
 import SearchBar from './search-bar';
 import { signoutUser } from '../../actions';
-import { useAuthenticated, useSearchResultsPreview } from '../../hooks/redux-hooks';
+import { useAuthenticated } from '../../hooks/redux-hooks';
 import NavProfileMenu from './nav-profile-menu';
 
 function NavBar({
-  onOpen, setAccountStatus, username, searchTerm, setSearchTerm,
+  onOpen, setAccountStatus, username,
 }) {
   // hooks
   const dispatch = useDispatch();
@@ -25,7 +25,6 @@ function NavBar({
   // const location = useLocation().pathname;
   const { colorMode, toggleColorMode } = useColorMode();
   const authenticated = useAuthenticated();
-  const resultsPreview = useSearchResultsPreview();
 
   // button functions
   const signOut = () => {
@@ -107,7 +106,7 @@ function NavBar({
     //   return null;
     // } else {
     return (
-      <SearchBar gamesData={resultsPreview} searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <SearchBar />
     );
   }
 

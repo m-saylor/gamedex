@@ -1,37 +1,46 @@
-import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { useQuery } from '@tanstack/react-query';
-import { selectGame } from '../../actions';
+import React, { useCallback, useEffect } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import ResultsList from './results-list';
 import JumpToTop from '../jump-to-top';
-// import { useSearchResults } from '../../hooks/redux-hooks';
 import SkeletonList from './skeleton-results-list';
 import { searchGamesFromIGDB } from '../../api/igdb';
+import { addSearchParam } from '../../utils/router-utils';
 
-function Results({ searchTerm }) {
+function Results() {
   // hooks
-  // const results = useSearchResults();
-  const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchTerm = searchParams.get('search');
 
-  // replace useSearchResults hook?
-  // export function useSearchResults() {
-  //   return useSelector((reduxState) => reduxState.igdb?.results);
-  // }
-
+  // query
+  const queryClient = useQueryClient();
   const results = useQuery({ queryKey: ['searchResults', searchTerm], queryFn: () => searchGamesFromIGDB(searchTerm), enabled: searchTerm !== undefined });
+  const games = results.data;
+
+  useEffect(() => {
+    if (!games) return;
+
+    games.forEach((game) => {
+      queryClient.setQueryData(['selectedGame', String(game.id)], game);
+    });
+  }, [queryClient, games]);
 
   // function for loading the individual game page
-  const onSelectGame = useCallback((game, coverUrl, year, avgRating) => {
-    dispatch(selectGame(game, coverUrl, year, avgRating));
-  }, [dispatch]);
+  const onSelectGame = useCallback((game) => {
+    setSearchParams(addSearchParam('selected', game.id));
+  }, [setSearchParams]);
 
-  if (!results) {
+  if (!searchTerm) {
+    return <div className="results-page">No results</div>;
+  }
+
+  if (!games) {
     return <div className="results-page"><SkeletonList /></div>;
   }
 
   return (
     <div className="results-page">
-      <ResultsList gamesData={results} onSelectGame={onSelectGame} />
+      <ResultsList games={games} onSelectGame={onSelectGame} />
       <JumpToTop />
     </div>
   );

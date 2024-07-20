@@ -38,20 +38,6 @@ export function useTopRated() {
 }
 
 /**
- * @returns an object with data for the search results
- */
-export function useSearchResults() {
-  return useSelector((reduxState) => reduxState.igdb?.results);
-}
-
-/**
- * @returns an object with data for the search results preview
- */
-export function useSearchResultsPreview() {
-  return useSelector((reduxState) => reduxState.igdb?.resultsPreview);
-}
-
-/**
  * @returns an object with data for the user
  */
 export function useUserInfo() {

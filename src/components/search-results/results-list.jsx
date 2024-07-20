@@ -4,17 +4,10 @@ import {
 } from '@chakra-ui/react';
 import { alternateCardColor } from '../../utils/style-utils';
 import GameListButton from '../game/game-list-button';
-import { getCoverUrl, getFirstReleaseYear } from '../../utils/game-info-utils';
 
-function ResultsList({ gamesData, onSelectGame }) {
-  const { games, covers, years } = gamesData;
-
+function ResultsList({ games, onSelectGame }) {
   const renderedGames = games?.map((game, index) => {
-    const coverUrl = getCoverUrl(covers[game.cover], 'cover_big');
-    const year = getFirstReleaseYear(game, years);
     const title = game.name?.toUpperCase();
-
-    const { rating } = game;
 
     return (
       <Card
@@ -39,8 +32,8 @@ function ResultsList({ gamesData, onSelectGame }) {
           mr={5}
           mt={3.5}
           objectFit="cover"
-          src={coverUrl}
-          onClick={() => onSelectGame(game, coverUrl, year, rating)}
+          src={game.coverUrl}
+          onClick={() => onSelectGame(game)}
         />
 
         <CardBody
@@ -55,7 +48,7 @@ function ResultsList({ gamesData, onSelectGame }) {
             fontSize={18}
             fontWeight="700"
             width="100%"
-            onClick={() => onSelectGame(game, coverUrl, year, rating)}
+            onClick={() => onSelectGame(game)}
           >
             {title}
           </Heading>
@@ -77,7 +70,7 @@ function ResultsList({ gamesData, onSelectGame }) {
           justifyContent="flex-end"
           mr="20px"
         >
-          <GameListButton id={game.id} onAdd={() => onSelectGame(game, coverUrl, year, rating)} />
+          <GameListButton id={game.id} onAdd={() => onSelectGame(game)} />
         </CardFooter>
       </Card>
     );
