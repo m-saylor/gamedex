@@ -1,58 +1,35 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useCallback, useRef, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import {
   Grid, GridItem, Image, Skeleton,
 } from '@chakra-ui/react';
-import { useQueries, useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import { getSpan, TILE_INDEX_TO_GAME_INDEX } from '../../../utils/masonry-utils';
 import { getTrendingGames } from '../../../api/twitch';
-import { fetchGameCard } from '../../../api/igdb';
-
-function getGameStyles(gameIdx, hoveredIdx, modalOpen) {
-  if (modalOpen) {
-    return {
-      className: 'blue-gray-filter',
-      zIndex: 0,
-      filter: 'blur(2px) grayscale(100%)',
-    };
-  }
-
-  if (hoveredIdx === null) return null;
-
-  if (hoveredIdx === gameIdx) {
-    return {
-      transform: 'scale(1.08)',
-      saturate: '20%',
-      zIndex: 20,
-    };
-  }
-
-  return {
-    zIndex: 0,
-  };
-}
+import { fetchGameCardsFromTwitchToIGDB } from '../../../api/igdb';
+import { getTrendingGameStyles } from '../../../utils/style-utils';
 
 function TrendingGames() {
   // queries
+  const queryClient = useQueryClient();
   const trendingTwitch = useQuery({ queryKey: ['trendingTwitchResults'], queryFn: getTrendingGames });
   const twitchData = trendingTwitch?.data;
-  const igdbIds = twitchData?.map((game) => game.igdb_id);
 
-  useQueries({
-    queries: igdbIds ? igdbIds.map((igdbId) => {
-      return { queryKey: ['selectedGame', igdbId], queryFn: () => fetchGameCard(igdbId) };
-    }) : [],
-  });
+  const trendingIGDB = useQuery({ queryKey: ['trendingIGDBResults', twitchData], queryFn: () => fetchGameCardsFromTwitchToIGDB(twitchData), enabled: twitchData !== undefined });
+  const igdbGames = trendingIGDB?.data;
 
-  // const trendingIGDB = useQuery({ queryKey: ['trendingIGDBResults', twitchData], queryFn: () => fetchGameInfoFromTwitchToIGDB(twitchData), enabled: twitchData !== undefined });
-  // const igdbData = trendingIGDB?.data;
-  // const games = igdbData?.games;
-  // const covers = igdbData?.covers;
-  // const years = igdbData?.years;
+  useEffect(() => {
+    if (!igdbGames) return;
+
+    igdbGames.forEach((game) => {
+      queryClient.setQueryData(['selectedGame', String(game.id)], game);
+    });
+  }, [queryClient, igdbGames]);
 
   // hooks
-  // const dispatch = useDispatch();
   const hoverTimeoutRef = useRef();
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedGame = searchParams.get('selected');
@@ -73,14 +50,6 @@ function TrendingGames() {
 
   const onSelectGame = useCallback((twitchGame) => {
     setSearchParams({ selected: twitchGame.igdb_id });
-    // const igdbGame = games.find((game) => String(game.id) === String(twitchGame.igdb_id));
-    // if (!igdbGame) { return; }
-
-    // const igdbCover = `https:${covers?.[igdbGame?.cover]}`.replace('thumb', 'cover_big');
-    // const igdbYear = years[years?.[0]];
-    // const igdbRating = igdbGame.rating;
-
-    // dispatch(selectGame(igdbGame, igdbCover, igdbYear, igdbRating));
   }, [setSearchParams]);
 
   function renderTrendingGames() {
@@ -90,7 +59,7 @@ function TrendingGames() {
       const span = getSpan(idx);
       const gameIdx = TILE_INDEX_TO_GAME_INDEX[idx];
       const game = twitchData?.[gameIdx];
-      const gameStyles = getGameStyles(gameIdx, hoveredGameIdx, selectedGame);
+      const gameStyles = getTrendingGameStyles(gameIdx, hoveredGameIdx, selectedGame);
       const isLoading = !game || trendingTwitch.isLoading;
 
       if (game) {

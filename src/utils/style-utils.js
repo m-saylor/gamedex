@@ -1,5 +1,5 @@
 // determine variant for horizontal cards to alternate colors between outline and filled
-function alternateCardColor(index) {
+export function alternateCardColor(index) {
   if (index % 2 === 0) {
     return 'outline';
   } else {
@@ -7,4 +7,26 @@ function alternateCardColor(index) {
   }
 }
 
-export default alternateCardColor;
+export function getTrendingGameStyles(gameIdx, hoveredIdx, modalOpen) {
+  if (modalOpen) {
+    return {
+      className: 'blue-gray-filter',
+      zIndex: 0,
+      filter: 'blur(2px) grayscale(100%)',
+    };
+  }
+
+  if (hoveredIdx === null) return null;
+
+  if (hoveredIdx === gameIdx) {
+    return {
+      transform: 'scale(1.08)',
+      saturate: '20%',
+      zIndex: 20,
+    };
+  }
+
+  return {
+    zIndex: 0,
+  };
+}

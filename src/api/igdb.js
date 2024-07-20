@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getCoverUrl, getFirstReleaseYear } from '../utils/game-info-utils';
 
 // IGDB URLs
 export const IGDB_GAMES_URL = 'https://t4ebtc69jj.execute-api.us-west-2.amazonaws.com/production/v4/games';
@@ -129,13 +130,21 @@ export async function fetchGameInfoFromIGDB(query) {
  * @returns an object of trending Twitch games with info from IGDB,
  * including game name, cover image, and release year
  */
-export async function fetchGameInfoFromTwitchToIGDB(twitchGames) {
+export async function fetchGameCardsFromTwitchToIGDB(twitchGames) {
   const igdbIds = twitchGames.map((game) => game.igdb_id);
   const query = `fields name, rating, cover, franchise, genres, summary, release_dates; where id=(${igdbIds.toString()}); limit 100;`;
 
-  const info = fetchGameInfoFromIGDB(query);
+  const { games, covers, years } = await fetchGameInfoFromIGDB(query);
 
-  return info;
+  const mergedGames = games.map((game) => {
+    const coverUrl = getCoverUrl(covers[game.cover], 'cover_big');
+    const year = getFirstReleaseYear(game, years);
+    return {
+      ...game, coverUrl, year, avgRating: game.rating, userRating: undefined,
+    };
+  });
+
+  return mergedGames;
 }
 
 /**
@@ -181,6 +190,8 @@ export async function fetchGameCard(igdbId) {
 
   const coverUrl = await fetchGameCoverUrl(game.cover);
   const year = await fetchGameReleaseYear(game.release_dates[0]);
+
+  console.log(igdbId, games, game, coverUrl, year);
 
   return {
     ...game, coverUrl, year, avgRating: game.rating, userRating: undefined,

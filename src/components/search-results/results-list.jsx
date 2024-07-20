@@ -2,15 +2,16 @@ import React from 'react';
 import {
   Card, CardBody, CardFooter, Image, Stack, Heading,
 } from '@chakra-ui/react';
-import alternateCardColor from '../../utils/style-utils';
+import { alternateCardColor } from '../../utils/style-utils';
 import GameListButton from '../game/game-list-button';
+import { getCoverUrl, getFirstReleaseYear } from '../../utils/game-info-utils';
 
 function ResultsList({ gamesData, onSelectGame }) {
   const { games, covers, years } = gamesData;
 
   const renderedGames = games?.map((game, index) => {
-    const coverUrl = `https:${covers[(game.cover)]}`.replace('thumb', 'cover_big');
-    const year = years[game?.release_dates?.[0]];
+    const coverUrl = getCoverUrl(covers[game.cover], 'cover_big');
+    const year = getFirstReleaseYear(game, years);
     const title = game.name?.toUpperCase();
 
     const { rating } = game;

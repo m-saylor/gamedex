@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Card, Skeleton,
 } from '@chakra-ui/react';
-import alternateCardColor from '../../../utils/style-utils';
+import { alternateCardColor } from '../../../utils/style-utils';
 
 function TopRatedSkeleton(props) {
   const renderedSkeleton = Array.from(Array(10).keys()).map((_, index) => {
