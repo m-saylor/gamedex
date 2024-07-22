@@ -24,6 +24,7 @@ function GameCard({ openAuthModal, isOpenAuthModal }) {
   const userInfo = useUserInfo();
   const userGames = useUserGames();
 
+  // provides functionality for retrieving and clearing the selected game in the URL
   const { selectedGame, clearSelectedGame } = useSelectedGame();
 
   // query
