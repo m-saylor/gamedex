@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
+import { Button, Flex } from '@chakra-ui/react';
+import { flatten } from 'lodash';
 import ResultsList from './results-list';
 import JumpToTop from '../jump-to-top';
 import SkeletonList from './skeleton-results-list';
-import { searchGamesFromIGDB } from '../../api/igdb';
+import { getIgdbSearchQueryFn } from '../../api/igdb';
 import { addSearchParam } from '../../utils/router-utils';
 
 function Results() {
@@ -14,8 +16,19 @@ function Results() {
 
   // query
   const queryClient = useQueryClient();
-  const results = useQuery({ queryKey: ['searchResults', searchTerm], queryFn: () => searchGamesFromIGDB(searchTerm), enabled: searchTerm !== undefined });
-  const games = results.data;
+  const queryFn = getIgdbSearchQueryFn(searchTerm);
+  const {
+    data, fetchNextPage, isFetching, hasNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['searchResults', searchTerm],
+    queryFn,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, pages) => {
+      return pages.length;
+    },
+  });
+
+  const games = flatten(data?.pages);
 
   useEffect(() => {
     if (!games) return;
@@ -34,7 +47,7 @@ function Results() {
     return <div className="results-page">No results</div>;
   }
 
-  if (!games) {
+  if (!games || games.length === 0) {
     return <div className="results-page"><SkeletonList /></div>;
   }
 
@@ -42,6 +55,7 @@ function Results() {
     <div className="results-page">
       <ResultsList games={games} onSelectGame={onSelectGame} />
       <JumpToTop />
+      <Flex justifyContent="center"><Button disabled={!hasNextPage} isLoading={isFetching} mb={16} onClick={() => fetchNextPage()}>Load More</Button></Flex>
     </div>
   );
 }

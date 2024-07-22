@@ -148,17 +148,20 @@ export async function fetchGameCardsFromTwitchToIGDB(twitchGames) {
 }
 
 /**
- * Fetches IGDB information for games based on the search term
+ * Returns a query function to search for IGDB games
  *
- * @param {array} twitchGames - IGDB API query, as described here https://api-docs.igdb.com/#reference
- * @returns an array of IGDB game objects
+ * @param {array} searchTerm - string to search for
+ * @returns an async function with takes in pageParams as a parameter. To be used in React Query useInfiniteQuery
  */
-export async function searchGamesFromIGDB(searchTerm) {
-  const query = `search "${searchTerm}"; fields name, rating, rating_count, cover, franchise, genres, summary, release_dates; where version_parent = null & rating_count > 0;`;
+export function getIgdbSearchQueryFn(searchTerm) {
+  const queryFn = async ({ pageParam = 0 }) => {
+    const offset = pageParam * 10;
+    const query = `search "${searchTerm}"; fields name, rating, rating_count, cover, summary, release_dates; where version_parent = null & rating_count > 0; limit 10; offset ${offset};`;
+    const games = await fetchGamesInfoFromIGDB(query);
+    return games;
+  };
 
-  const games = fetchGamesInfoFromIGDB(query);
-
-  return games;
+  return queryFn;
 }
 
 /**

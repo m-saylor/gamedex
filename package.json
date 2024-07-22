@@ -43,6 +43,7 @@
     "boxicons": "^2.1.4",
     "framer-motion": "^11.2.0",
     "jquery": "^3.7.1",
+    "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
