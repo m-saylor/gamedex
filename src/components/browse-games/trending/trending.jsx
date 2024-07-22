@@ -10,7 +10,7 @@ import { getSpan, TILE_INDEX_TO_GAME_INDEX } from '../../../utils/masonry-utils'
 import { getTrendingGames } from '../../../api/twitch';
 import { fetchGameCardsFromTwitchToIGDB } from '../../../api/igdb';
 import { getTrendingGameStyles } from '../../../utils/style-utils';
-import useSelectedGame from '../../../hooks/use-selected-game';
+import { useSelectedGame } from '../../../hooks/search-params-hooks';
 
 function TrendingGames() {
   // queries for trending games from twitch and their info from IGDB

@@ -10,6 +10,13 @@ import rootReducer from './reducers';
 
 import App from './components/app';
 
+// Import your publishable key
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error('Missing Publishable Key');
+}
+
 // this creates the store with the reducers
 const store = configureStore({
   reducer: rootReducer,

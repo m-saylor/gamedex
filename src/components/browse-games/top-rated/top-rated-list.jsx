@@ -8,7 +8,7 @@ import { alternateCardColor } from '../../../utils/style-utils';
 import GameListButton from '../../game/game-list-button';
 import RankNumber from './rank-number';
 import TopRatedSkeleton from './top-rated-skeleton';
-import useSelectedGame from '../../../hooks/use-selected-game';
+import { useSelectedGame } from '../../../hooks/search-params-hooks';
 
 function TopRatedList({ topRatedGames }) {
   // queries for the top 100 rated games from IGDB

@@ -15,7 +15,7 @@ import {
 } from '../../hooks/redux-hooks';
 import GameCardButtons from './game-card-buttons';
 import { fetchGameCard } from '../../api/igdb';
-import useSelectedGame from '../../hooks/use-selected-game';
+import { useSelectedGame } from '../../hooks/search-params-hooks';
 
 function GameCard({ openAuthModal, isOpenAuthModal }) {
   // hooks
@@ -80,19 +80,19 @@ function GameCard({ openAuthModal, isOpenAuthModal }) {
 
     };
 
-    if (!authenticated) { // if not logged in
+    // save the game and data to a user
+    if (!authenticated) {
       openAuthModal();
-    } else if (userRating === 0) { // if no rating is made
+    } else if (userRating === 0) {
       dispatch(addUserGame(userGames, username, savedGame));
       onCloseGame();
     } else {
-      // save the game with all data
       dispatch(addUserGame(userGames, username, savedGame, userRating));
       onCloseGame();
     }
   }, [id, game?.name, game?.coverUrl, game?.summary, game?.year, avgRating, authenticated, userRating, openAuthModal, dispatch, userGames, username, onCloseGame]);
 
-  // delete the game from user games
+  // delete the game and data from a user
   const onDeleteGame = useCallback(
     () => {
       // delete the saved game entry
@@ -102,10 +102,9 @@ function GameCard({ openAuthModal, isOpenAuthModal }) {
     [dispatch, userGames, username, id, onCloseGame],
   );
 
-  // update the saved game entry
+  // update the game's data for a user
   const onUpdateGame = useCallback(
     () => {
-      // delete the saved game entry
       dispatch(updateUserGame(userGames, username, game, userRating));
       onCloseGame();
     },

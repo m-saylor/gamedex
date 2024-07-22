@@ -2,7 +2,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useCallback } from 'react';
 import { addSearchParam, removeSearchParam } from '../utils/router-utils';
 
-const useSelectedGame = () => {
+export const useSelectedGame = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedGame = searchParams.get('selected');
 
@@ -17,4 +17,17 @@ const useSelectedGame = () => {
   return { selectedGame, setSelectedGame, clearSelectedGame };
 };
 
-export default useSelectedGame;
+export const useSelectedTab = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedTab = searchParams.get('tab');
+
+  const setSelectedTab = useCallback((tabName) => {
+    setSearchParams(addSearchParam('tab', tabName));
+  }, [setSearchParams]);
+
+  const clearSelectedTab = useCallback(() => {
+    setSearchParams(removeSearchParam('tab'));
+  }, [setSearchParams]);
+
+  return { selectedTab, setSelectedTab, clearSelectedTab };
+};

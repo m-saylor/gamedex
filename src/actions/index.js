@@ -72,7 +72,7 @@ export function clearAuthError() {
   };
 }
 
-export function signinUser({ emailOrUsername, password }, navigate) {
+export function signinUser({ emailOrUsername, password }) {
   // takes in an object with emailOrUsername and password (minimal user object)
   // returns a thunk method that takes dispatch as an argument
   return async (dispatch) => {
@@ -111,8 +111,7 @@ export function signupUser({ username, email, password }, navigate) {
   };
 }
 
-// deletes token from localstorage
-// and deauths
+// deletes token from localstorage and deauths
 export function signoutUser(navigate) {
   return (dispatch) => {
     localStorage.removeItem('token');
