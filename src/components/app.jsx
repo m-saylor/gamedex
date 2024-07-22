@@ -11,7 +11,7 @@ import Results from './search-results/results';
 import AuthModal from './auth-modal/auth-modal';
 import GameCard from './game/game-card';
 import {
-  clearAuthError, fetchTopRatedGames, loadUser,
+  clearAuthError, loadUser,
 } from '../actions';
 import theme from '../theme/theme';
 import { useUserInfo } from '../hooks/redux-hooks';
@@ -47,11 +47,6 @@ export default function App(props) {
   // load user (check local storage for token)
   useEffect(() => {
     dispatch(loadUser());
-  }, [dispatch]);
-
-  // load top rated games
-  useEffect(() => {
-    dispatch(fetchTopRatedGames());
   }, [dispatch]);
 
   return (

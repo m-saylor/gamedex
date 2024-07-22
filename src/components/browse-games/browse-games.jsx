@@ -2,14 +2,14 @@ import React from 'react';
 import {
   Tabs, TabList, TabPanels, Tab, TabPanel,
 } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import JumpToTop from '../jump-to-top';
 import TopRatedList from './top-rated/top-rated-list';
-import { useTopRated } from '../../hooks/redux-hooks';
 import TrendingGames from './trending/trending';
+import { fetchTopRatedGames } from '../../api/igdb';
 
 function BrowseGames(props) {
-  // hooks
-  const topRated = useTopRated(); // fetch the top 100 rated games
+  const topRatedGames = useQuery({ queryKey: ['topRatedGames'], queryFn: fetchTopRatedGames });
 
   return (
     <div>
@@ -23,7 +23,7 @@ function BrowseGames(props) {
             <TrendingGames />
           </TabPanel>
           <TabPanel>
-            <TopRatedList gamesData={topRated} />
+            <TopRatedList topRatedGames={topRatedGames} />
           </TabPanel>
         </TabPanels>
       </Tabs>

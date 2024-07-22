@@ -1,38 +1,40 @@
-import React, { useCallback } from 'react';
+import React, { useEffect } from 'react';
 import {
   Card, CardBody, CardFooter, Image, Stack, Heading, Text,
   Progress,
 } from '@chakra-ui/react';
-import { useDispatch } from 'react-redux';
+import { useQueryClient } from '@tanstack/react-query';
 import { alternateCardColor } from '../../../utils/style-utils';
 import GameListButton from '../../game/game-list-button';
-import Ranking from './ranking';
-import { selectGame } from '../../../actions';
+import RankNumber from './rank-number';
 import TopRatedSkeleton from './top-rated-skeleton';
-import { getCoverUrl, getFirstReleaseYear } from '../../../utils/game-info-utils';
+import useSelectedGame from '../../../hooks/use-selected-game';
 
-function TopRatedList({ gamesData }) {
-  // hooks
-  const dispatch = useDispatch();
+function TopRatedList({ topRatedGames }) {
+  // queries for the top 100 rated games from IGDB
+  const queryClient = useQueryClient();
+  const gamesData = topRatedGames?.data;
 
-  // store data
-  const { games, covers, years } = gamesData;
+  // preloads game card data for each game on top rated list
+  useEffect(() => {
+    if (!gamesData) return;
 
-  // select game and fetch data
-  const onSelectGame = useCallback((game, coverUrl, year, avgRating) => {
-    dispatch(selectGame(game, coverUrl, year, avgRating));
-  }, [dispatch]);
+    gamesData.forEach((game) => {
+      queryClient.setQueryData(['selectedGame', String(game.id)], game);
+    });
+  }, [queryClient, gamesData]);
 
-  // render a skeleton loading state
-  if (!games) {
+  // sets the selected game from the top rated list in the URL
+  const { setSelectedGame } = useSelectedGame();
+
+  // renders a skeleton loading state
+  if (topRatedGames.isLoading) {
     return <TopRatedSkeleton />;
   }
 
-  const renderedGames = games?.map((game, index) => {
-    const coverUrl = getCoverUrl(covers[game.cover], 'cover_big');
-    const year = getFirstReleaseYear(game, years);
+  const renderedGames = gamesData?.map((game, index) => {
     const title = game.name.toUpperCase();
-    const { rating } = game;
+    const displayAvgRating = game.avgRating?.toFixed(2);
     return (
       <Card
         direction={{ base: 'column', sm: 'row' }}
@@ -42,7 +44,7 @@ function TopRatedList({ gamesData }) {
         overflow="hidden"
         variant={alternateCardColor(index)}
       >
-        <Ranking index={index} />
+        <RankNumber index={index} />
 
         <Image
           alignItems="center"
@@ -56,8 +58,8 @@ function TopRatedList({ gamesData }) {
           mr={5}
           mt={3.5}
           objectFit="cover"
-          src={coverUrl}
-          onClick={() => onSelectGame(game, coverUrl, year, rating)}
+          src={game.coverUrl}
+          onClick={() => setSelectedGame(game.id)}
         />
 
         <CardBody
@@ -72,7 +74,7 @@ function TopRatedList({ gamesData }) {
             fontSize={18}
             fontWeight="700"
             width="100%"
-            onClick={() => onSelectGame(game, coverUrl, year, rating)}
+            onClick={() => setSelectedGame(game.id)}
           >
             {title}
           </Heading>
@@ -93,12 +95,12 @@ function TopRatedList({ gamesData }) {
               py="2"
               textAlign="right"
             >
-              {rating?.toFixed(2)}
+              {displayAvgRating}
             </Text>
 
             <Progress
               colorScheme="green"
-              value={game.rating}
+              value={game.avgRating}
             />
           </Stack>
         </CardBody>
@@ -109,7 +111,7 @@ function TopRatedList({ gamesData }) {
           justifyContent="flex-end"
           mr="20px"
         >
-          <GameListButton id={game.id} onAdd={() => onSelectGame(game, coverUrl, year, rating)} />
+          <GameListButton id={game.id} onAdd={() => setSelectedGame(game.id)} />
         </CardFooter>
       </Card>
     );

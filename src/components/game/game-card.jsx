@@ -6,7 +6,6 @@ import {
   Slider, SliderTrack, SliderFilledTrack, SliderThumb,
 } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import {
   addUserGame, deleteUserGame, updateUserGame,
@@ -16,8 +15,7 @@ import {
 } from '../../hooks/redux-hooks';
 import GameCardButtons from './game-card-buttons';
 import { fetchGameCard } from '../../api/igdb';
-
-import { removeSearchParam } from '../../utils/router-utils';
+import useSelectedGame from '../../hooks/use-selected-game';
 
 function GameCard({ openAuthModal, isOpenAuthModal }) {
   // hooks
@@ -25,11 +23,11 @@ function GameCard({ openAuthModal, isOpenAuthModal }) {
   const authenticated = useAuthenticated(); // to check if user is signed in
   const userInfo = useUserInfo();
   const userGames = useUserGames();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const gameId = searchParams.get('selected');
+
+  const { selectedGame, clearSelectedGame } = useSelectedGame();
 
   // query
-  const { data: game } = useQuery({ queryKey: ['selectedGame', gameId], queryFn: () => fetchGameCard(gameId), enabled: gameId !== undefined });
+  const { data: game } = useQuery({ queryKey: ['selectedGame', selectedGame], queryFn: () => fetchGameCard(selectedGame), enabled: selectedGame !== undefined });
 
   // state
   const [userRating, setUserRating] = useState(0);
@@ -64,9 +62,9 @@ function GameCard({ openAuthModal, isOpenAuthModal }) {
   }, [game, userInfo.games]);
 
   const onCloseGame = useCallback(() => {
-    setSearchParams(removeSearchParam('selected'));
+    clearSelectedGame();
     setUserRating(0);
-  }, [setSearchParams]);
+  }, [clearSelectedGame]);
 
   // save + log the game
   const onLogGame = useCallback(() => {

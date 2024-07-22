@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { SimpleGrid } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
-import { selectGame } from '../../../actions';
 import UserGame from './user-game';
 import { useUserGames, useUserInfo } from '../../../hooks/redux-hooks';
 import { getUserGames } from '../../../api/gamedex';
@@ -40,9 +39,10 @@ function UserGames() {
     if (isUserPage) {
       const userRating = userInfo?.games?.[game.id];
       const { coverUrl, releaseYear, avgRating } = game;
-      dispatch(selectGame(game, coverUrl, releaseYear, avgRating, userRating));
+      // dispatch(selectGame(game, coverUrl, releaseYear, avgRating, userRating));
+      console.log(game, coverUrl, releaseYear, avgRating, userRating);
     }
-  }, [isUserPage, userInfo?.games, dispatch]);
+  }, [isUserPage, userInfo?.games]);
 
   if (!games) {
     return null;

@@ -1,4 +1,3 @@
-import * as IGDB from '../api/igdb';
 import { signInSuccess, signUpSuccess } from '../utils/text-utils';
 import * as GameDex from '../api/gamedex';
 
@@ -13,10 +12,6 @@ export const ActionTypes = {
   DEAUTH_USER: 'DEAUTH_USER',
   AUTH_ERROR: 'AUTH_ERROR',
   CLEAR_AUTH_ERROR: 'CLEAR_AUTH_ERROR',
-
-  // IGDB Actions
-  IGDB_TOP_RATED: 'IGDB_TOP_RATED',
-  SELECT_GAME: 'SELECT_GAME',
 };
 
 // update game information when clicking the save button
@@ -201,36 +196,5 @@ export function fetchUserGames(username) {
       // Add error handling later
       console.log('error', error);
     }
-  };
-}
-
-// IGDB TOP RATED GAMES ACTION
-export function fetchTopRatedGames() {
-  return (dispatch) => {
-    const query = 'fields name, rating, cover, franchise, genres, summary, release_dates; sort rating desc; where rating_count > 400 & version_parent = null; limit 100;';
-
-    IGDB.fetchGames(query).then(async (games) => {
-      const covers = await IGDB.fetchGameCovers(games);
-      const years = await IGDB.fetchGameReleaseYears(games);
-      // dispatch a new action type, which will put the search results into the Redux store
-      dispatch({
-        type: ActionTypes.IGDB_TOP_RATED, games, covers, years,
-      });
-    }).catch((error) => {
-      // For now, if we get an error, just log it.
-      // Add error handling later
-      console.log('error', error);
-    });
-  };
-}
-
-export function selectGame(game, coverUrl, year, avgRating, userRating = undefined) {
-  return (dispatch) => {
-    dispatch({
-      type: ActionTypes.SELECT_GAME,
-      payload: {
-        ...game, coverUrl, year, avgRating, userRating,
-      },
-    });
   };
 }

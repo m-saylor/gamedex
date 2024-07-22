@@ -198,3 +198,17 @@ export async function fetchGameCard(igdbId) {
     ...game, coverUrl, year, avgRating: game.rating, userRating: undefined,
   };
 }
+
+/**
+ *
+ * Fetches the list of top 100 rated games from the IGDB API
+ *
+ * @returns games object
+ */
+export async function fetchTopRatedGames() {
+  const query = 'fields name, rating, cover, franchise, genres, summary, release_dates; sort rating desc; where rating_count > 400 & version_parent = null; limit 100;';
+
+  const gamesData = await fetchGamesInfoFromIGDB(query);
+
+  return gamesData;
+}

@@ -6,11 +6,11 @@ import {
   Grid, GridItem, Image, Skeleton,
 } from '@chakra-ui/react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useSearchParams } from 'react-router-dom';
 import { getSpan, TILE_INDEX_TO_GAME_INDEX } from '../../../utils/masonry-utils';
 import { getTrendingGames } from '../../../api/twitch';
 import { fetchGameCardsFromTwitchToIGDB } from '../../../api/igdb';
 import { getTrendingGameStyles } from '../../../utils/style-utils';
+import useSelectedGame from '../../../hooks/use-selected-game';
 
 function TrendingGames() {
   // queries for trending games from twitch and their info from IGDB
@@ -33,9 +33,8 @@ function TrendingGames() {
     });
   }, [queryClient, igdbGames]);
 
-  // sets selected game from trending in the URL
-  const [searchParams, setSearchParams] = useSearchParams();
-  const selectedGame = searchParams.get('selected');
+  // sets the selected game from the trending grid in the URL
+  const { selectedGame, setSelectedGame } = useSelectedGame();
 
   // implements and times out the hover effect
   const hoverTimeoutRef = useRef();
@@ -51,10 +50,6 @@ function TrendingGames() {
     setHoveredGameIdx(null);
     clearTimeout(hoverTimeoutRef);
   }, []);
-
-  const onSelectGame = useCallback((twitchGame) => {
-    setSearchParams({ selected: twitchGame.igdb_id });
-  }, [setSearchParams]);
 
   function renderTrendingGames() {
     const renderedGames = [];
@@ -72,7 +67,7 @@ function TrendingGames() {
             colSpan={span}
             key={`${game.igdb_id}-${idx}`}
             rowSpan={span}
-            onClick={() => onSelectGame(game)}
+            onClick={() => setSelectedGame(game.igdb_id)}
             onMouseEnter={() => onMouseEnterGridItem(gameIdx)}
             onMouseLeave={onMouseLeaveGridItem}
           >

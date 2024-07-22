@@ -31,13 +31,6 @@ export function useAuthMsg() {
 }
 
 /**
- * @returns an object with data for the top 100 rated games
- */
-export function useTopRated() {
-  return useSelector((reduxState) => reduxState.igdb?.topRated);
-}
-
-/**
  * @returns an object with data for the user
  */
 export function useUserInfo() {
