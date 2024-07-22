@@ -13,14 +13,18 @@ import { fetchGameCardsFromTwitchToIGDB } from '../../../api/igdb';
 import { getTrendingGameStyles } from '../../../utils/style-utils';
 
 function TrendingGames() {
-  // queries
+  // queries for trending games from twitch and their info from IGDB
   const queryClient = useQueryClient();
   const trendingTwitch = useQuery({ queryKey: ['trendingTwitchResults'], queryFn: getTrendingGames });
   const twitchData = trendingTwitch?.data;
-
-  const trendingIGDB = useQuery({ queryKey: ['trendingIGDBResults', twitchData], queryFn: () => fetchGameCardsFromTwitchToIGDB(twitchData), enabled: twitchData !== undefined });
+  const trendingIGDB = useQuery({
+    queryKey: ['trendingIGDBResults', twitchData],
+    queryFn: () => fetchGameCardsFromTwitchToIGDB(twitchData),
+    enabled: twitchData !== undefined,
+  });
   const igdbGames = trendingIGDB?.data;
 
+  // preloads game card data for each game on trending grid
   useEffect(() => {
     if (!igdbGames) return;
 
@@ -29,12 +33,12 @@ function TrendingGames() {
     });
   }, [queryClient, igdbGames]);
 
-  // hooks
-  const hoverTimeoutRef = useRef();
+  // sets selected game from trending in the URL
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedGame = searchParams.get('selected');
 
-  // state
+  // implements and times out the hover effect
+  const hoverTimeoutRef = useRef();
   const [hoveredGameIdx, setHoveredGameIdx] = useState(null);
 
   const onMouseEnterGridItem = useCallback((gameIdx) => {
