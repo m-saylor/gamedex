@@ -8,6 +8,7 @@ import TopRatedList from './top-rated/top-rated-list';
 import TrendingGames from './trending/trending';
 import { fetchTopRatedGames } from '../../api/igdb';
 import { useSelectedTab } from '../../hooks/search-params-hooks';
+import { browseTabNameToIndex, browseTabNames } from '../../utils/tab-utils';
 
 function BrowseGames(props) {
   // preloads data for the top rated games tab
@@ -17,11 +18,11 @@ function BrowseGames(props) {
   const { selectedTab, setSelectedTab } = useSelectedTab();
 
   // provides controlled tab functionality
-  const activeIndex = props.options.findIndex((option) => option.active);
-  const [tabIndex, setTabIndex] = useState(activeIndex);
+  const [tabIndex, setTabIndex] = useState(browseTabNameToIndex[selectedTab] ?? 0);
+
   const handleTabsChange = (index) => {
     setTabIndex(index);
-    setSelectedTab();
+    setSelectedTab(browseTabNames[index]);
   };
 
   return (
