@@ -10,6 +10,8 @@ export const GAMEDEX_URL = 'https://video-game-tracker-api.onrender.com/api';
  */
 export async function signin(fields) {
   const response = await axios.post(`${GAMEDEX_URL}/signin`, fields);
+  localStorage.setItem('token', response.data.token);
+
   return { token: response.data.token, user: response.data.user };
 }
 
