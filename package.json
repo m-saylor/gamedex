@@ -1,7 +1,7 @@
 {
-  "name": "frontend-starter-pack",
+  "name": "gamedex",
   "version": "1.0.0",
-  "description": "frontend starter pack with vite, babel, sass, and eslint",
+  "description": "a video game tracking web app that lets you rate, save, and learn more about each",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
@@ -13,6 +13,8 @@
   "license": "ISC",
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.51.1",
+    "@types/node": "^20.14.12",
+    "@types/react": "^18.3.3",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.56.0",
     "eslint-config-airbnb": "^19.0.4",
