@@ -16,16 +16,16 @@ function AuthModal(
   { isOpen, onClose, accountStatus, setAccountStatus }: AuthModalProps
 ) {
   // state
-  const [username, setUsername] = useState < String > ('');
-  const [email, setEmail] = useState < String > ('');
-  const [password, setPassword] = useState < String > ('');
-  const [emailOrUsername, setEmailOrUsername] = useState < String > ('');
+  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [emailOrUsername, setEmailOrUsername] = useState<string>('');
 
   // hooks
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Clear state on close
+  // clear state on close
   useEffect(() => {
     if (!isOpen) {
       setUsername('');
@@ -63,7 +63,7 @@ function AuthModal(
           <ModalHeader> </ModalHeader>
           <ModalCloseButton />
           <AuthModalInputs
-            account={accountStatus}
+            accountStatus={accountStatus}
             email={email}
             emailOrUsername={emailOrUsername}
             logInOnEnter={logInOnEnter}

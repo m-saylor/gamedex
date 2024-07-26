@@ -6,7 +6,7 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { AuthModalProps } from '~/utils/props-typing-utils';
 
 function PasswordInput({ setPassword, onEnter }: AuthModalProps) {
-  const [show, setShow] = useState < Boolean > (false);
+  const [show, setShow] = useState<Boolean>(false);
   const handleClick = () => setShow((prev) => !prev);
 
   return (
