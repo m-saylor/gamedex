@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ClerkProvider } from '@clerk/clerk-react';
+// import { ClerkProvider } from '@clerk/clerk-react';
 import { ActionTypes } from './actions';
 import rootReducer from './reducers';
 
@@ -36,10 +36,10 @@ const root = createRoot(document.getElementById('main'));
 root.render(
   <QueryClientProvider client={queryClient}>
     <Provider store={store}>
-      <ClerkProvider afterSignOutUrl="/" publishableKey={publishableKey}>
-        <App />
-        <ReactQueryDevtools />
-      </ClerkProvider>
+      {/* <ClerkProvider afterSignOutUrl="/" publishableKey={publishableKey}> */}
+      <App />
+      <ReactQueryDevtools />
+      {/* </ClerkProvider> */}
     </Provider>
   </QueryClientProvider>,
 );

@@ -10,7 +10,7 @@ import {
 import {
   MoonIcon, SunIcon, BellIcon,
 } from '@chakra-ui/icons';
-import { SignInButton } from '@clerk/clerk-react';
+// import { SignInButton } from '@clerk/clerk-react';
 import SearchBar from './search-bar';
 import { signoutUser } from '../../actions';
 import { useAuthenticated } from '../../hooks/redux-hooks';
@@ -89,11 +89,9 @@ function NavBar({
           <Button variant="ghostBW" onClick={handleBrowseGames}>
             BROWSE GAMES
           </Button>
-          <SignInButton>
-            <Button variant="ghostBW" onClick={handleLogIn}>
-              LOG IN
-            </Button>
-          </SignInButton>
+          <Button variant="ghostBW" onClick={handleLogIn}>
+            LOG IN
+          </Button>
           <Button variant="solidPink" onClick={handleSignUp}>
             SIGN UP
           </Button>
