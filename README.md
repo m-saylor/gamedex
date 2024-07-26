@@ -33,12 +33,12 @@ Check out GameDex [here](https://video-game-tracker-m7cr.vercel.app/) !
 <p>
   <ul>
     <li><img alt="React" src="https://img.shields.io/badge/-React-61DAFB?style=flat-square&logo=react&logoColor=white" /></li>
+    <li><img alt="TypeScript" src="https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=TypeScript&logoColor=white" /></li>
     <li><img alt="Redux" src="https://img.shields.io/badge/-Redux-764ABC?style=flat-square&logo=redux&logoColor=white" /></li>
     <li><img alt="React Query" src="https://img.shields.io/badge/-React%20Query-FF4154?style=flat-square&logo=react+query&logoColor=white" /></li>
     <li><img alt="React Router" src="https://img.shields.io/badge/-React%20Router-CA4245?style=flat-square&logo=react+router&logoColor=white" /></li>
     <li><img alt="Lodash" src="https://img.shields.io/badge/-Lodash-3492FF?style=flat-square&logo=lodash&logoColor=white" /></li>
-    <li><img alt="JavaScript" src="https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat-square&logo=JavaScript&logoColor=white" /></li>
-    <img alt="Chakra UI" src="https://img.shields.io/badge/-Chakra%20UI-319795?style=flat-square&logo=chakra+ui&logoColor=white" />
+    <li><img alt="Chakra UI" src="https://img.shields.io/badge/-Chakra%20UI-319795?style=flat-square&logo=chakra+ui&logoColor=white" /></li>
     <li><img alt="Sass" src="https://img.shields.io/badge/-SCSS-CC6699?style=flat-square&logo=Sass&logoColor=white" /></li>
     <li><img alt="MongoDB" src="https://img.shields.io/badge/-MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white" /></li>
     <li><img alt="Express.js" src="https://img.shields.io/badge/-Express.js-000000?style=flat-square&logo=express&logoColor=white" /></li>
