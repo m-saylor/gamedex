@@ -6,7 +6,8 @@
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "project": true
+        "project": true,
+        "ecmaVersion": 2022
     },
     "rules": {
         "strict": 0,
