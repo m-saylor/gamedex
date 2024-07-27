@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Button, Flex, Stack, useColorModeValue,

@@ -1,5 +1,6 @@
+// @ts-nocheck
+
 import React, { useCallback, useState } from 'react';
-// import { useDispatch } from 'react-redux';
 import { Flex } from '@chakra-ui/react';
 import EditableButtons from './editable-buttons';
 import EditableUserInput from './editable-user-input';
@@ -7,9 +8,6 @@ import EditableUserInput from './editable-user-input';
 function UserInfoInput({
   defaultValue, height, text, setText,
 }) {
-  // hooks
-//   const dispatch = useDispatch();
-
   // state
   const [editMode, setEditMode] = useState(false);
 

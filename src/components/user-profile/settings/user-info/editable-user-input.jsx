@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React from 'react';
 import { Input } from '@chakra-ui/react';
 
@@ -37,7 +39,7 @@ function EditableUserInput({
         value={text}
         variant="filled"
         width="500px"
-        onChange={() => {}}
+        onChange={() => { }}
         onClick={() => setEditMode(true)}
         onFocus={() => setEditMode(true)}
       />

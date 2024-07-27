@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAuthenticated, useUserInfo } from '../hooks/redux-hooks';

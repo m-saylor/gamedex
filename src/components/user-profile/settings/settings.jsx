@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {
   Tab, Tabs, TabList, TabPanel, TabPanels, Heading, Flex,
 } from '@chakra-ui/react';

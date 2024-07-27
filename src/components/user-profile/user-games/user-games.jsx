@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useCallback, useEffect } from 'react';
 import { SimpleGrid } from '@chakra-ui/react';
 import { useParams } from 'react-router';

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useState, useCallback } from 'react';
 import { Textarea, Flex } from '@chakra-ui/react';
 import EditableButtons from './editable-buttons';
@@ -74,7 +76,7 @@ function EditableTextarea({
         value={text}
         variant="filled"
         width="500px"
-        onChange={() => {}}
+        onChange={() => { }}
         onClick={() => setEditMode(true)}
         onFocus={() => setEditMode(true)}
       />

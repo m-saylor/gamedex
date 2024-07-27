@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Button, Flex, Stack, useColorModeValue, Text,
@@ -11,7 +13,7 @@ import UploadProfilePhoto from './update-profile-photo';
 import { updateUser } from '../../../../actions';
 import UserInfoTextarea from './user-info-textarea';
 
-function UserInfoSettings(props) {
+function UserInfoSettings() {
   // hooks
   const userInfo = useUserInfo();
   const dispatch = useDispatch();

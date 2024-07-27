@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useEffect } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { useAuthMsg, useAuthenticated } from '../hooks/redux-hooks';

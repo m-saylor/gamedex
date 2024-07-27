@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useCallback } from 'react';
 import { ButtonGroup, IconButton } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
@@ -15,7 +17,7 @@ function EditSavedGameButtons({
 
   const onDeleteGame = useCallback(
     () => {
-    // store the game ID
+      // store the game ID
       const id = game?.id;
 
       // delete the saved game entry

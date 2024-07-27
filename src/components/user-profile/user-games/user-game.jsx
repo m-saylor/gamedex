@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useState } from 'react';
 import { Image, CardBody, Card } from '@chakra-ui/react';
 import EditSavedGameButtons from './edit-saved-game-buttons';

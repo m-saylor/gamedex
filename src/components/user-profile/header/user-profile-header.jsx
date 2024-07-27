@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {
   Avatar, Button, Flex, Link, Text,
 } from '@chakra-ui/react';
@@ -14,8 +16,6 @@ function UserProfileHeader() {
 
   const { username } = useParams();
   const [userInfo, setUserInfo] = useState();
-
-  console.log(userInfo);
 
   useEffect(() => {
     async function loadUser() {
@@ -52,7 +52,7 @@ function UserProfileHeader() {
         </Text> */}
         <Link href={`https://${userInfo?.website}`} isExternal>
           <Button variant="link">
-            {userInfo?.website }
+            {userInfo?.website}
           </Button>
         </Link>
         <SocialIconButtons socials={userInfo?.socials} />
