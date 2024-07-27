@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 // @ts-nocheck
 
 /* eslint-disable react/jsx-props-no-spreading */
@@ -32,9 +31,7 @@ function TrendingGames() {
     if (!igdbGames) return;
 
     igdbGames.forEach((game) => {
-      if (game.id && game) {
-        queryClient.setQueryData(['selectedGame', String(game.id)], game);
-      }
+      queryClient.setQueryData(['selectedGame', String(game.id)], game);
     });
   }, [queryClient, igdbGames]);
 
@@ -62,9 +59,6 @@ function TrendingGames() {
     for (let idx = 0; idx < 78; idx += 1) {
       const span = getSpan(idx);
       const gameIdx = TILE_INDEX_TO_GAME_INDEX[idx];
-      if (!gameIdx) {
-        return;
-      }
       const game = twitchData?.[gameIdx];
       const gameStyles = getTrendingGameStyles(gameIdx, hoveredGameIdx, selectedGame);
       const isLoading = !game || trendingTwitch.isLoading;

@@ -152,7 +152,8 @@ export async function fetchGamesInfoFromIGDB(query: string): Promise<Game[]> {
  * @returns an object of trending Twitch games with info from IGDB,
  * including game name, cover image, and release year
  */
-export async function fetchGameCardsFromTwitchToIGDB(twitchGames: TwitchGame[]) {
+export async function fetchGameCardsFromTwitchToIGDB(twitchGames?: TwitchGame[]) {
+  if (!twitchGames) return [];
   const igdbIds = twitchGames.map((game) => game.igdb_id);
   const query = `fields name, rating, cover, franchise, genres, summary, release_dates; where id=(${igdbIds.toString()}); limit 100;`;
 
