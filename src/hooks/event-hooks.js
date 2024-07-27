@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useCallback } from 'react';
 
 // key codes

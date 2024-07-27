@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useSearchParams } from 'react-router-dom';
 import { useCallback } from 'react';
 import { addSearchParam, removeSearchParam } from '../utils/router-utils';
