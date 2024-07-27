@@ -32,7 +32,9 @@ function TrendingGames() {
     if (!igdbGames) return;
 
     igdbGames.forEach((game) => {
-      queryClient.setQueryData(['selectedGame', String(game.id)], game);
+      if (game.id && game) {
+        queryClient.setQueryData(['selectedGame', String(game.id)], game);
+      }
     });
   }, [queryClient, igdbGames]);
 
