@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
@@ -14,7 +16,7 @@ import {
   useAuthenticated, useUserGames, useUserInfo,
 } from '../../hooks/redux-hooks';
 import GameCardButtons from './game-card-buttons';
-import { fetchGameCard } from '../../api/igdb';
+import { fetchGameCard } from '../api/igdb';
 import { useSelectedGame } from '../../hooks/search-params-hooks';
 
 function GameCard({ openAuthModal, isOpenAuthModal }) {

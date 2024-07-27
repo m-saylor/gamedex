@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useCallback, useEffect } from 'react';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';

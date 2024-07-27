@@ -1,4 +1,5 @@
-// import React, { ReactNode } from 'react';
+// @ts-nocheck
+
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -10,7 +11,6 @@ import {
 import {
   MoonIcon, SunIcon, BellIcon,
 } from '@chakra-ui/icons';
-// import { SignInButton } from '@clerk/clerk-react';
 import SearchBar from './search-bar';
 import { signoutUser } from '../../actions';
 import { useAuthenticated } from '../../hooks/redux-hooks';

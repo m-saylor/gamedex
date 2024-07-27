@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 /* eslint-disable react/jsx-props-no-spreading */
 import React, {
   useCallback, useEffect, useRef, useState,
@@ -38,9 +40,9 @@ function TrendingGames() {
 
   // implements and times out the hover effect
   const hoverTimeoutRef = useRef();
-  const [hoveredGameIdx, setHoveredGameIdx] = useState<number | null>(null);
+  const [hoveredGameIdx, setHoveredGameIdx] = useState(null);
 
-  const onMouseEnterGridItem = useCallback((gameIdx: number) => {
+  const onMouseEnterGridItem = useCallback((gameIdx) => {
     hoverTimeoutRef.current = setTimeout(() => {
       setHoveredGameIdx(gameIdx);
     }, 10);

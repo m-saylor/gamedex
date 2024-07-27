@@ -1,12 +1,14 @@
+// @ts-nocheck
+
 import React from 'react';
 import { Button } from '@chakra-ui/react';
 import { signInPrompt, signUpPrompt } from '../../utils/text-utils';
-import { AuthModalProps } from '~/utils/props-typing-utils';
+// import { AuthModalProps } from '~/utils/props-typing-utils';
 
 // a function to render modal buttons according to sign up / sign in
 function AuthModalButtons({
   accountStatus, setAccountStatus, logIn, signUp,
-}: AuthModalProps) {
+}) {
   if (accountStatus) {
     return (
       <div className="auth-buttons">

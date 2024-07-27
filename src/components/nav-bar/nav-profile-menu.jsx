@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React from 'react';
 import {
   Menu, MenuButton, Button, Avatar, MenuList, Center, MenuDivider, MenuItem,

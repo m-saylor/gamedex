@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useRef } from 'react';
 import {
   InputGroup, Button, Flex, Center, Avatar,

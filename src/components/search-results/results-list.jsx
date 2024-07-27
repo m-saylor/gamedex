@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React from 'react';
 import {
   Card, CardBody, CardFooter, Image, Stack, Heading,
@@ -6,7 +8,7 @@ import { alternateCardColor } from '../../utils/style-utils';
 import GameListButton from '../game/game-list-button';
 
 function ResultsList({ games, onSelectGame }) {
-  const renderedGames = games?.map((game, index: number) => {
+  const renderedGames = games?.map((game, index) => {
     const title = game.name?.toUpperCase();
 
     return (

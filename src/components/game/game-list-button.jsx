@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React from 'react';
 import { IconButton } from '@chakra-ui/react';
 import { CheckIcon, AddIcon } from '@chakra-ui/icons';

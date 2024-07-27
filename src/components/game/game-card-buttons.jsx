@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React from 'react';
 import { ButtonGroup, Button } from '@chakra-ui/react';
 

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useState } from 'react';
 import {
   Tabs, TabList, TabPanels, Tab, TabPanel,
@@ -20,7 +22,7 @@ function BrowseGames() {
   // provides controlled tab functionality
   const [tabIndex, setTabIndex] = useState(browseTabNameToIndex[selectedTab] ?? 0);
 
-  const handleTabsChange = (index: number) => {
+  const handleTabsChange = (index) => {
     setTabIndex(index);
     setSelectedTab(browseTabNames[index]);
   };

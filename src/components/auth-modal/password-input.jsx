@@ -1,12 +1,14 @@
+// @ts-nocheck
+
 import React, { useState } from 'react';
 import {
   Input, InputGroup, InputRightElement, IconButton,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { AuthModalProps } from '~/utils/props-typing-utils';
+// import { AuthModalProps } from '~/utils/props-typing-utils';
 
-function PasswordInput({ setPassword, onEnter }: AuthModalProps) {
-  const [show, setShow] = useState<Boolean>(false);
+function PasswordInput({ setPassword, onEnter }) {
+  const [show, setShow] = useState(false);
   const handleClick = () => setShow((prev) => !prev);
 
   return (

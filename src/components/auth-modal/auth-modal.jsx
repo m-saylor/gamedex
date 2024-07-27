@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Modal, ModalOverlay, ModalContent, ModalHeader,
@@ -8,18 +10,19 @@ import { useNavigate } from 'react-router';
 import { signinUser, signupUser } from '../../actions';
 import AuthModalButtons from './auth-modal-buttons';
 import AuthModalInputs from './auth-modal-inputs';
-import isEmail from '../../utils/input-utils';
 import { useOnKeyDown, ENTER_KEY } from '../../hooks/event-hooks';
-import { AuthModalProps } from '~/utils/props-typing-utils';
+// import { AuthModalProps } from '~/utils/props-typing-utils';
 
 function AuthModal(
-  { isOpen, onClose, accountStatus, setAccountStatus }: AuthModalProps
+  {
+    isOpen, onClose, accountStatus, setAccountStatus,
+  },
 ) {
   // state
-  const [username, setUsername] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [emailOrUsername, setEmailOrUsername] = useState<string>('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [emailOrUsername, setEmailOrUsername] = useState('');
 
   // hooks
   const dispatch = useDispatch();
@@ -37,10 +40,6 @@ function AuthModal(
 
   // to sign up a user
   const createUser = () => {
-    if (!isEmail(email)) {
-      // error!
-    }
-
     dispatch(signupUser({ username, email, password }, navigate));
   };
 

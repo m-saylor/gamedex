@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useEffect } from 'react';
 import {
   Card, CardBody, CardFooter, Image, Stack, Heading, Text,
@@ -10,7 +12,7 @@ import RankNumber from './rank-number';
 import TopRatedSkeleton from './top-rated-skeleton';
 import { useSelectedGame } from '../../../hooks/search-params-hooks';
 
-function TopRatedList({ topRatedGames }: { topRatedGames: object }) {
+function TopRatedList({ topRatedGames }) {
   // queries for the top 100 rated games from IGDB
   const queryClient = useQueryClient();
   const gamesData = topRatedGames?.data;
@@ -32,7 +34,7 @@ function TopRatedList({ topRatedGames }: { topRatedGames: object }) {
     return <TopRatedSkeleton />;
   }
 
-  const renderedGames = gamesData?.map((game, index: number) => {
+  const renderedGames = gamesData?.map((game, index) => {
     const title = game.name.toUpperCase();
     const displayAvgRating = game.avgRating?.toFixed(2);
     return (
