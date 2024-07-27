@@ -5,10 +5,10 @@ import {
   Tabs, TabList, TabPanels, Tab, TabPanel,
 } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import JumpToTop from '../jump-to-top';
+import JumpToTop from '../jump-to-top.tsx';
 import TopRatedList from './top-rated/top-rated-list';
 import TrendingGames from './trending/trending';
-import { fetchTopRatedGames } from '../../api/igdb';
+import { fetchTopRatedGames } from '../../api/igdb.ts';
 import { useSelectedTab } from '../../hooks/search-params-hooks';
 import { browseTabNameToIndex, browseTabNames } from '../../utils/tab-utils';
 

@@ -6,9 +6,9 @@ import { useSearchParams } from 'react-router-dom';
 import { Button, Flex } from '@chakra-ui/react';
 import { flatten } from 'lodash';
 import ResultsList from './results-list';
-import JumpToTop from '../jump-to-top';
-import SkeletonList from './skeleton-results-list';
-import { getIgdbSearchQueryFn } from '../../api/igdb';
+import JumpToTop from '../jump-to-top.tsx';
+import SkeletonList from './skeleton-results-list.tsx';
+import { getIgdbSearchQueryFn } from '../../api/igdb.ts';
 import { addSearchParam } from '../../utils/router-utils';
 
 function Results() {

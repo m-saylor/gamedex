@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 // @ts-nocheck
 
 /* eslint-disable react/jsx-props-no-spreading */
@@ -9,8 +10,8 @@ import {
 } from '@chakra-ui/react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getSpan, TILE_INDEX_TO_GAME_INDEX } from '../../../utils/masonry-utils';
-import { getTrendingGames } from '../../../api/twitch';
-import { fetchGameCardsFromTwitchToIGDB } from '../../../api/igdb';
+import { getTrendingGames } from '../../../api/twitch.ts';
+import { fetchGameCardsFromTwitchToIGDB } from '../../../api/igdb.ts';
 import { getTrendingGameStyles } from '../../../utils/style-utils';
 import { useSelectedGame } from '../../../hooks/search-params-hooks';
 

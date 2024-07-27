@@ -72,7 +72,12 @@
     "src/components/nav-bar/nav-profile-menu.jsx",
     "src/components/nav-bar/search-bar.jsx",
     "src/components/search-results/results-list.jsx",
-    "src/components/search-results/results.jsx"
+    "src/components/search-results/results.jsx",
+    "src/components/auth-modal/auth-modal-buttons.jsx",
+    "src/components/auth-modal/auth-modal-inputs.jsx",
+    "src/components/auth-modal/auth-modal.jsx",
+    "src/components/auth-modal/password-input.jsx",
+    "src/components/browse-games/top-rated/top-rated-list.jsx"
   ],
   "exclude": [
     "node_modules"

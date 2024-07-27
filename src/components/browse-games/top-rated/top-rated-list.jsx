@@ -8,8 +8,8 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { alternateCardColor } from '../../../utils/style-utils';
 import GameListButton from '../../game/game-list-button';
-import RankNumber from './rank-number';
-import TopRatedSkeleton from './top-rated-skeleton';
+import RankNumber from './rank-number.tsx';
+import TopRatedSkeleton from './top-rated-skeleton.tsx';
 import { useSelectedGame } from '../../../hooks/search-params-hooks';
 
 function TopRatedList({ topRatedGames }) {

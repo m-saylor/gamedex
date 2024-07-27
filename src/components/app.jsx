@@ -17,7 +17,7 @@ import {
 } from '../actions';
 import theme from '../theme/theme';
 import { useUserInfo } from '../hooks/redux-hooks';
-import UserProfile from './user-profile/user-profile';
+import UserProfile from './user-profile/user-profile.tsx';
 import Settings from './user-profile/settings/settings';
 import AuthToaster from './auth-toaster';
 // import Footer from './footer';

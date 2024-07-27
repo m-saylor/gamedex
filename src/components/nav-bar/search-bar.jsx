@@ -13,7 +13,7 @@ import { Search2Icon } from '@chakra-ui/icons';
 // import debounce from 'lodash.debounce';
 import { useQuery } from '@tanstack/react-query';
 import { useOnKeyDown, ENTER_KEY } from '../../hooks/event-hooks';
-import { searchGamesPreviewFromIGDB } from '../../api/igdb';
+import { searchGamesPreviewFromIGDB } from '../../api/igdb.ts';
 
 function SearchBar() {
   // state
