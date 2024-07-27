@@ -11,7 +11,7 @@ export const IGDB_DATES_URL = 'https://t4ebtc69jj.execute-api.us-west-2.amazonaw
 
 // IGDB API key
 const API_KEY = 'jIXQfDYw1yaJmLNLclCnI7fsrufLpmhB3eR8yuKn';
- 
+
 // IGDB API header
 export const IGDB_HEADERS = { 'x-api-key': API_KEY };
 
