@@ -29,6 +29,10 @@ function setDefaultDarkMode() {
   }
 }
 
+function FallBack() {
+  return <div>URL Not Found</div>;
+}
+
 export default function App() {
   // state
   const [accountStatus, setAccountStatus] = useState(true); // true if the user has an account
@@ -80,8 +84,4 @@ export default function App() {
       </BrowserRouter>
     </ChakraProvider>
   );
-}
-
-function FallBack() {
-  return <div>URL Not Found</div>;
 }
