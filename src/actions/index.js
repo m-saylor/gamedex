@@ -1,5 +1,7 @@
-import { signInSuccess, signUpSuccess } from '../utils/text-utils';
+// @ts-nocheck
+
 import * as GameDex from '../api/gamedex';
+import { signUpSuccess, signInSuccess } from '../utils/text-utils';
 
 // keys for actiontypes
 export const ActionTypes = {
@@ -15,7 +17,7 @@ export const ActionTypes = {
 };
 
 // update game information when clicking the save button
-export function updateGame(id: number, navigate, newName: string) {
+export function updateGame(id, navigate, newName) {
   return async (dispatch) => {
     try {
       const fields = {
@@ -30,7 +32,7 @@ export function updateGame(id: number, navigate, newName: string) {
 }
 
 // delete an individual game when clicking the delete button
-export function deleteGame(id: number, navigate) {
+export function deleteGame(id, navigate) {
   return async (dispatch) => {
     try {
       await GameDex.deleteGame(id);
@@ -120,7 +122,7 @@ export function signoutUser(navigate) {
   };
 }
 
-export function updateUser(username: string, user) {
+export function updateUser(username, user) {
   return async (dispatch) => {
     try {
       const newUser = await GameDex.updateUser(username, user);
@@ -167,7 +169,7 @@ export function deleteUserGame(userGames, username, gameId) {
 
 // Update game from saved games
 // Update user games and user info
-export function updateUserGame(userGames, username: string, game, review: object) {
+export function updateUserGame(userGames, username, game, review) {
   return async (dispatch) => {
     try {
       const user = await GameDex.updateGame(username, game, review);
@@ -182,7 +184,7 @@ export function updateUserGame(userGames, username: string, game, review: object
   };
 }
 
-export function fetchUserGames(username: string) {
+export function fetchUserGames(username) {
   // takes in an object with email and password (minimal user object)
   // returns a thunk method that takes dispatch as an argument
   return async (dispatch) => {

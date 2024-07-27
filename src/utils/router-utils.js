@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 export function removeSearchParam(keyToRemove) {
   return (prev) => {
     const prevParams = Array.from(prev.entries());

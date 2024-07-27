@@ -1,4 +1,6 @@
-function pattern1(index: number) {
+// @ts-nocheck
+
+function pattern1(index) {
   if (index === 0) {
     return 6;
   }
@@ -15,7 +17,7 @@ function pattern1(index: number) {
   return 3;
 }
 
-function pattern2(index: number) {
+function pattern2(index) {
   if (index <= 2) {
     return 2;
   }
@@ -34,7 +36,7 @@ function pattern2(index: number) {
   return 2;
 }
 
-export function getSpan(index: number) {
+export function getSpan(index) {
   // Pattern 1
   if (index < 9) {
     return pattern1(index);
