@@ -4,38 +4,6 @@ import React, { useState, useCallback } from 'react';
 import { Textarea, Flex } from '@chakra-ui/react';
 import EditableButtons from './editable-buttons';
 
-function UserInfoTextarea({
-  defaultValue, height, text, setText,
-}) {
-  // state
-  const [editMode, setEditMode] = useState(false);
-
-  // display game title changes
-  const onTextChange = useCallback((event) => {
-    setText(event.target.value);
-  }, [setText]);
-
-  // update game card
-  const onSave = useCallback(() => {
-    setText(text);
-    // dispatch(updateGame(selectedGame.id, navigate, title));
-    setEditMode(false);
-  }, [setText, text]);
-
-  // cancel edits with the cancel button
-  const onCancel = useCallback(() => {
-    setEditMode(false);
-    setText(defaultValue);
-  }, [defaultValue, setText]);
-
-  return (
-    <Flex direction="row">
-      <EditableTextarea defaultValue={defaultValue} editMode={editMode} height={height} setEditMode={setEditMode} text={text} onTextChange={onTextChange} />
-      <EditableButtons editMode={editMode} setEditMode={setEditMode} onCancel={onCancel} onSave={onSave} />
-    </Flex>
-  );
-}
-
 function EditableTextarea({
   editMode, setEditMode, onTextChange, currentValue, text, height,
 }) {
@@ -82,6 +50,38 @@ function EditableTextarea({
       />
     );
   }
+}
+
+function UserInfoTextarea({
+  defaultValue, height, text, setText,
+}) {
+  // state
+  const [editMode, setEditMode] = useState(false);
+
+  // display game title changes
+  const onTextChange = useCallback((event) => {
+    setText(event.target.value);
+  }, [setText]);
+
+  // update game card
+  const onSave = useCallback(() => {
+    setText(text);
+    // dispatch(updateGame(selectedGame.id, navigate, title));
+    setEditMode(false);
+  }, [setText, text]);
+
+  // cancel edits with the cancel button
+  const onCancel = useCallback(() => {
+    setEditMode(false);
+    setText(defaultValue);
+  }, [defaultValue, setText]);
+
+  return (
+    <Flex direction="row">
+      <EditableTextarea defaultValue={defaultValue} editMode={editMode} height={height} setEditMode={setEditMode} text={text} onTextChange={onTextChange} />
+      <EditableButtons editMode={editMode} setEditMode={setEditMode} onCancel={onCancel} onSave={onSave} />
+    </Flex>
+  );
 }
 
 export default UserInfoTextarea;

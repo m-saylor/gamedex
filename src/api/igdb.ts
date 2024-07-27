@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { getCoverUrl, getFirstReleaseYear } from '../utils/game-info-utils';
+import type { Game as IgdbGame, ReleaseDate, Cover } from 'igdb-api-types';
+import { getCoverUrl, getFirstReleaseYear } from '../utils/game-info-utils.ts';
 
-import type { Game as IgdbGame, ReleaseDate, Cover } from "igdb-api-types"
 import type { Game, TwitchGame } from './types';
 
 // IGDB URLs
@@ -129,8 +129,8 @@ export async function fetchGamesInfoFromIGDB(query: string): Promise<Game[]> {
 
   const mergedGames: Game[] = [];
   games.forEach((game) => {
-    let coverUrl = "";
-    if (typeof game.cover === "number") {
+    let coverUrl = '';
+    if (typeof game.cover === 'number') {
       const url = covers[game.cover];
       coverUrl = getCoverUrl(url, 'cover_big');
     }
@@ -209,14 +209,14 @@ export async function fetchGameCard(igdbId: string): Promise<Game | undefined> {
     return undefined;
   }
 
-  let coverUrl = "";
-  if (typeof game.cover === "number") {
+  let coverUrl = '';
+  if (typeof game.cover === 'number') {
     coverUrl = await fetchGameCoverUrl(game.cover);
   }
 
   let firstYear;
-  const releaseDateId = game.release_dates?.[0]
-  if (typeof releaseDateId === "number") {
+  const releaseDateId = game.release_dates?.[0];
+  if (typeof releaseDateId === 'number') {
     firstYear = await fetchGameReleaseYear(releaseDateId);
   }
 

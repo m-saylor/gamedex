@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import axios from 'axios';
-import { TwitchGame, TwitchGamesResponse } from './types';
+import { TwitchGame, TwitchGamesResponse } from './types.ts';
 
 const TWITCH_CLIENT_ID = 'vdc8zk32y8t1shw13l3upxufjhjdqd';
 const TWITCH_CLIENT_SECRET = 'usfmwfr26y8p0opracqci6kkegkw85';

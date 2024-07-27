@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable import/no-extraneous-dependencies */
 import eslint from 'vite-plugin-eslint';
 import { defineConfig } from 'vite';

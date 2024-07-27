@@ -4,7 +4,7 @@ import {
 } from '@chakra-ui/react';
 import UserGames from './user-games/user-games';
 import UserProfileHeader from './header/user-profile-header';
-import JumpToTop from '../jump-to-top';
+import JumpToTop from '../jump-to-top.tsx';
 
 function UserProfile() {
   return (

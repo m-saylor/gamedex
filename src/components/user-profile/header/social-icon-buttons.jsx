@@ -9,6 +9,20 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import { Flex, IconButton, Link } from '@chakra-ui/react';
 
+function SocialIconButton({ label, icon, url }) {
+  return (
+    <Link href={`https://${url}`} isExternal>
+      <IconButton
+        aria-label={label}
+        cursor="pointer"
+        icon={icon}
+        src={url}
+        variant="ghost"
+      />
+    </Link>
+  );
+}
+
 function SocialIconButtons({ socials }) {
   // determine user socials
 
@@ -46,20 +60,6 @@ function SocialIconButtons({ socials }) {
     <Flex alignItems="center" direction="row" justifyContent="space-around">
       {renderSocialButtons()}
     </Flex>
-  );
-}
-
-function SocialIconButton({ label, icon, url }) {
-  return (
-    <Link href={`https://${url}`} isExternal>
-      <IconButton
-        aria-label={label}
-        cursor="pointer"
-        icon={icon}
-        src={url}
-        variant="ghost"
-      />
-    </Link>
   );
 }
 
