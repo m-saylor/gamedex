@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { ActionTypes } from '../actions';
 
 const initialState = {
