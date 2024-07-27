@@ -1,5 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import axios from 'axios';
+import { TwitchGame, TwitchGamesResponse } from './types';
 
 const TWITCH_CLIENT_ID = 'vdc8zk32y8t1shw13l3upxufjhjdqd';
 const TWITCH_CLIENT_SECRET = 'usfmwfr26y8p0opracqci6kkegkw85';
@@ -13,7 +14,7 @@ const TRENDING_GAMES_LENGTH = 78;
 // Exclude Virtual Casino, I'm Only Sleeping, VR Chat, and no covers
 const EXCLUDED_GAME_IDS = ['45517', '71001', '33615', '290049'];
 
-function includeGame(game) {
+function includeGame(game: TwitchGame) {
   if (game.igdb_id === '' || game.box_art_url === '') {
     return false;
   }
@@ -25,7 +26,7 @@ function includeGame(game) {
   return true;
 }
 
-export async function getAccessToken() {
+export async function getAccessToken(): Promise<string> {
   const response = await axios.post(`${TWITCH_OAUTH_URL}?client_id=${TWITCH_CLIENT_ID}&client_secret=${TWITCH_CLIENT_SECRET}&grant_type=client_credentials`);
   return response.data.access_token;
 }
@@ -55,10 +56,11 @@ export async function getTrendingGames() {
     }
     count += 1;
   }
-  const { cursor } = response.data.pagination;
+  const twitchResponse = response?.data as TwitchGamesResponse;
+  const { cursor } = twitchResponse.pagination;
 
   // Filter non games
-  let games = response.data.data.filter(includeGame);
+  let games = twitchResponse.data.filter(includeGame);
 
   // Fetch another page if we don't have enough games
   let newGames = [];
@@ -73,7 +75,7 @@ export async function getTrendingGames() {
   // Fix image urls
   const processedGames = games.map((game) => {
     const imageUrl = game.box_art_url;
-    const sizedUrl = imageUrl?.replace('{width}', 1000).replace('{height}', 1300);
+    const sizedUrl = imageUrl?.replace('{width}', '1000').replace('{height}', '1300');
     return { ...game, box_art_url: sizedUrl };
   });
 

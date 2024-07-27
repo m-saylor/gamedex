@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { getCoverUrl, getFirstReleaseYear } from '../utils/game-info-utils';
 
+import type { Game as IgdbGame, ReleaseDate, Cover } from "igdb-api-types"
+import type { Game, TwitchGame } from './types';
+
 // IGDB URLs
 export const IGDB_GAMES_URL = 'https://t4ebtc69jj.execute-api.us-west-2.amazonaws.com/production/v4/games';
 export const IGDB_COVERS_URL = 'https://t4ebtc69jj.execute-api.us-west-2.amazonaws.com/production/v4/covers';
@@ -18,11 +21,11 @@ export const IGDB_HEADERS = { 'x-api-key': API_KEY };
  * @param {string} query - IGDB API query, as described here https://api-docs.igdb.com/#reference
  * @returns an array of IGDB game objects
  */
-export async function fetchGames(query) {
+export async function fetchGames(query: string): Promise<IgdbGame[]> {
   const response = await axios.post(IGDB_GAMES_URL, query, {
     headers: IGDB_HEADERS,
   });
-  const games = response.data;
+  const games = response.data as IgdbGame[];
   return games;
 }
 
@@ -31,16 +34,17 @@ export async function fetchGames(query) {
  * @param {string} coverId
  * @returns formatted cover url
  */
-export async function fetchGameCoverUrl(coverId) {
+export async function fetchGameCoverUrl(coverId: number): Promise<string> {
   const query = `fields url; where id=${coverId};`;
 
   // Fetch cover art for the game
   const response = await axios.post(IGDB_COVERS_URL, query, {
     headers: IGDB_HEADERS,
   });
+  const coversData = response.data as Cover[];
 
-  const cover = response.data?.[0];
-  const coverUrl = cover ? `https://${cover.url.replace('thumb', 'cover_big')}` : undefined;
+  const url = coversData?.[0]?.url;
+  const coverUrl = getCoverUrl(url, 'cover_big');
   return coverUrl;
 }
 
@@ -49,21 +53,22 @@ export async function fetchGameCoverUrl(coverId) {
  * @param {string} releaseYearId
  * @returns release year (YYYY)
  */
-export async function fetchGameReleaseYear(releaseYearId) {
+export async function fetchGameReleaseYear(releaseYearId: number): Promise<number | undefined> {
   const query = `fields y; where id=${releaseYearId};`;
 
   const response = await axios.post(IGDB_DATES_URL, query, {
     headers: IGDB_HEADERS,
   });
+  const releaseYearData = response.data as ReleaseDate[];
 
-  return response.data?.[0]?.y;
+  return releaseYearData?.[0]?.y;
 }
 
 /**
  * Fetches covers from an array of games
  * @returns an object with cover id keys mappign to cover url values
  */
-export async function fetchGameCovers(games) {
+export async function fetchGameCovers(games: IgdbGame[]) {
   // Build cover query
   const coverIds = games.map((game) => {
     return game.cover;
@@ -75,9 +80,10 @@ export async function fetchGameCovers(games) {
   const response = await axios.post(IGDB_COVERS_URL, query, {
     headers: IGDB_HEADERS,
   });
+  const coversData = response.data as Cover[];
 
-  const covers = {};
-  response.data.forEach((cover) => {
+  const covers: { [key: number]: string | undefined } = {};
+  coversData.forEach((cover) => {
     covers[cover.id] = cover.url;
   });
   return covers;
@@ -87,7 +93,7 @@ export async function fetchGameCovers(games) {
  * Fetches release years from an array of games
  * @returns an object with release year id keys maping to year (YYYY) values
  */
-export async function fetchGameReleaseYears(games) {
+export async function fetchGameReleaseYears(games: IgdbGame[]) {
   const yearIds = games.map((game) => {
     return game.release_dates?.[0] ?? 0;
   });
@@ -97,9 +103,10 @@ export async function fetchGameReleaseYears(games) {
   const response = await axios.post(IGDB_DATES_URL, query, {
     headers: IGDB_HEADERS,
   });
+  const releaseYearsData = response.data as ReleaseDate[];
 
-  const years = {};
-  response.data.forEach((year) => {
+  const years: { [key: number]: number | undefined } = {};
+  releaseYearsData.forEach((year) => {
     years[year.id] = year.y;
   });
   return years;
@@ -112,7 +119,7 @@ export async function fetchGameReleaseYears(games) {
  * @returns an array of games with info from IGDB,
  * including game name, cover image, and release year
  */
-export async function fetchGamesInfoFromIGDB(query) {
+export async function fetchGamesInfoFromIGDB(query: string): Promise<Game[]> {
   const games = await fetchGames(query);
 
   // Then, fetch game covers and years for the games
@@ -120,12 +127,19 @@ export async function fetchGamesInfoFromIGDB(query) {
   const covers = await fetchGameCovers(games);
   const years = await fetchGameReleaseYears(games);
 
-  const mergedGames = games.map((game) => {
-    const coverUrl = getCoverUrl(covers[game.cover], 'cover_big');
-    const year = getFirstReleaseYear(game, years);
-    return {
-      ...game, coverUrl, year, avgRating: game.rating, userRating: undefined,
+  const mergedGames: Game[] = [];
+  games.forEach((game) => {
+    let coverUrl = "";
+    if (typeof game.cover === "number") {
+      const url = covers[game.cover];
+      coverUrl = getCoverUrl(url, 'cover_big');
+    }
+
+    const firstYear = getFirstReleaseYear(game, years);
+    const newGame = {
+      ...game, coverUrl, firstYear, avgRating: game.rating, userRating: undefined,
     };
+    mergedGames.push(newGame);
   });
 
   return mergedGames;
@@ -138,7 +152,7 @@ export async function fetchGamesInfoFromIGDB(query) {
  * @returns an object of trending Twitch games with info from IGDB,
  * including game name, cover image, and release year
  */
-export async function fetchGameCardsFromTwitchToIGDB(twitchGames) {
+export async function fetchGameCardsFromTwitchToIGDB(twitchGames: TwitchGame[]) {
   const igdbIds = twitchGames.map((game) => game.igdb_id);
   const query = `fields name, rating, cover, franchise, genres, summary, release_dates; where id=(${igdbIds.toString()}); limit 100;`;
 
@@ -153,8 +167,8 @@ export async function fetchGameCardsFromTwitchToIGDB(twitchGames) {
  * @param {array} searchTerm - string to search for
  * @returns an async function with takes in pageParams as a parameter. To be used in React Query useInfiniteQuery
  */
-export function getIgdbSearchQueryFn(searchTerm) {
-  const queryFn = async ({ pageParam = 0 }) => {
+export function getIgdbSearchQueryFn(searchTerm: string) {
+  const queryFn = async ({ pageParam = 0 }): Promise<Game[]> => {
     const offset = pageParam * 10;
     const query = `search "${searchTerm}"; fields name, rating, rating_count, cover, summary, release_dates; where version_parent = null & rating_count > 0; limit 10; offset ${offset};`;
     const games = await fetchGamesInfoFromIGDB(query);
@@ -167,10 +181,10 @@ export function getIgdbSearchQueryFn(searchTerm) {
 /**
  * Fetches a preview of game name for games based on the search term
  *
- * @param {array} twitchGames - IGDB API query, as described here https://api-docs.igdb.com/#reference
+ * @param {array} searchTerm - string to search for
  * @returns an array of IGDB game objects
  */
-export async function searchGamesPreviewFromIGDB(searchTerm) {
+export async function searchGamesPreviewFromIGDB(searchTerm: string): Promise<IgdbGame[]> {
   const query = `search "${searchTerm}"; fields name, rating, cover, franchise, genres, summary, release_dates; where version_parent = null & rating_count > 0;`;
 
   const games = fetchGames(query);
@@ -185,17 +199,29 @@ export async function searchGamesPreviewFromIGDB(searchTerm) {
  * @param {*} igdbId - IGDB game id
  * @returns game object
  */
-export async function fetchGameCard(igdbId) {
+export async function fetchGameCard(igdbId: string): Promise<Game | undefined> {
   const query = `fields name, rating, cover, franchise, genres, summary, release_dates; where id=${igdbId};`;
 
   const games = await fetchGames(query);
   const game = games?.[0];
 
-  const coverUrl = await fetchGameCoverUrl(game.cover);
-  const year = await fetchGameReleaseYear(game.release_dates[0]);
+  if (!game) {
+    return undefined;
+  }
+
+  let coverUrl = "";
+  if (typeof game.cover === "number") {
+    coverUrl = await fetchGameCoverUrl(game.cover);
+  }
+
+  let firstYear;
+  const releaseDateId = game.release_dates?.[0]
+  if (typeof releaseDateId === "number") {
+    firstYear = await fetchGameReleaseYear(releaseDateId);
+  }
 
   return {
-    ...game, coverUrl, year, avgRating: game.rating, userRating: undefined,
+    ...game, coverUrl, firstYear, avgRating: game.rating, userRating: undefined,
   };
 }
 

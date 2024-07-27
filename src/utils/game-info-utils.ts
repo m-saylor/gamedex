@@ -1,5 +1,6 @@
-export function getCoverUrl(cover: string, size: string) {
-  const coverUrl = `https:${cover}`.replace('thumb', size);
+export function getCoverUrl(url: string | undefined, size: string) {
+  if (!url) return "";
+  const coverUrl = `https:${url}`.replace('thumb', size);
   return coverUrl;
 }
 
