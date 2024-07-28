@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { ActionTypes } from '../actions';
+import { ActionTypes } from '../actions/index.ts';
 import { signOutSuccess } from '../utils/text-utils';
 
 const initialState = {
