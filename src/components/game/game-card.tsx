@@ -8,12 +8,12 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import {
   addUserGame, deleteUserGame, updateUserGame,
-} from '../../actions/index';
+} from '../../actions/index.ts';
 import {
   useAuthenticated, useUserGames, useUserInfo,
   useAppDispatch,
 } from '../../hooks/redux-hooks.ts';
-import GameCardButtons from './game-card-buttons';
+import GameCardButtons from './game-card-buttons.tsx';
 import { fetchGameCard } from '../../api/igdb.ts';
 import { Game } from '../../api/types.ts';
 import { useSelectedGame } from '../../hooks/search-params-hooks';
@@ -45,7 +45,7 @@ function GameCard({ openAuthModal, isOpenAuthModal }: GameCardProps) {
 
   // store the game data
   const title = game?.name;
-  const avgRating = game?.avgRating?.toFixed(2); // avg rating rounded to two decimals
+  const avgRating = Number(game?.avgRating?.toFixed(2)); // avg rating rounded to two decimals
   const id = game?.id;
   const gameInLibrary = userGames.find((savedGame: Game) => String(savedGame.id) === String(id));
 
@@ -75,15 +75,16 @@ function GameCard({ openAuthModal, isOpenAuthModal }: GameCardProps) {
 
   // save + log the game
   const onLogGame = useCallback(() => {
+    if (!id) return;
+
     // store the game model
-    const savedGame = {
+    const savedGame: Game = {
       id,
       name: game?.name,
       coverUrl: game?.coverUrl,
       summary: game?.summary,
-      releaseYear: game?.firstYear,
+      firstYear: game?.firstYear,
       avgRating,
-
     };
 
     // save the game and data to a user
