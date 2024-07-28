@@ -1,7 +1,4 @@
-// @ts-nocheck
-
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 // import { useLocation } from 'react-router-dom';
 import {
@@ -12,15 +9,21 @@ import {
   MoonIcon, SunIcon, BellIcon,
 } from '@chakra-ui/icons';
 import SearchBar from './search-bar';
-import { signoutUser } from '../../actions';
-import { useAuthenticated } from '../../hooks/redux-hooks';
+import { signoutUser } from '../../actions/index.ts';
+import { useAppDispatch, useAuthenticated } from '../../hooks/redux-hooks.ts';
 import NavProfileMenu from './nav-profile-menu';
+
+interface NavBarProps {
+  username: string;
+  setAccountStatus: (accountStatus: boolean) => void;
+  onOpen: () => void;
+}
 
 function NavBar({
   onOpen, setAccountStatus, username,
-}) {
+}: NavBarProps) {
   // hooks
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   // const location = useLocation().pathname;
@@ -61,7 +64,9 @@ function NavBar({
   const handleColorModeClick = useCallback(() => {
     toggleColorMode();
     const userColorMode = localStorage.getItem('chakra-ui-color-mode');
-    localStorage.setItem('user-color-mode', userColorMode);
+    if (userColorMode) {
+      localStorage.setItem('user-color-mode', userColorMode);
+    }
   }, [toggleColorMode]);
 
   // if signed in, render a different menu
