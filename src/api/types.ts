@@ -20,3 +20,8 @@ export type TwitchGamesResponse = {
     cursor: string;
   };
 }
+
+export type SignInParameters = {
+  emailOrUsername: string;
+  password: string;
+}

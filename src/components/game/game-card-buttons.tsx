@@ -1,11 +1,16 @@
-// @ts-nocheck
-
 import React from 'react';
 import { ButtonGroup, Button } from '@chakra-ui/react';
 
+interface GameCardButtonProps {
+  onSave: () => void;
+  onUpdate: () => void;
+  onDelete: () => void;
+  editMode: boolean;
+}
+
 function GameCardButtons({
   onSave, onUpdate, onDelete, editMode,
-}) {
+}: GameCardButtonProps) {
   if (editMode) {
     return (
       <ButtonGroup spacing="2">
