@@ -59,7 +59,7 @@ export async function updateUser(username: string, user: object) {
  * @param {object} review
  * @returns game if game is successfuly saved, else throw error
  */
-export async function saveGame(username: string, game: Game, review: object) {
+export async function saveGame(username: string, game: Game, review?: object | number) {
   const fields = { username, game, review };
 
   const response = await axios.post(`${GAMEDEX_URL}/users/${username}/games`, fields, { headers: { authorization: localStorage.getItem('token') } });
@@ -105,7 +105,7 @@ export async function deleteGame(username: string, gameId: number) {
  * @param {object} review
  * @returns game if game is successfuly saved, else throw error
  */
-export async function updateGame(username: string, game: Game, review: object) {
+export async function updateGame(username: string, game: Game, review?: object | number | undefined) {
   const fields = { username, game, review };
 
   const response = await axios.put(`${GAMEDEX_URL}/users/${username}/games`, fields, { headers: { authorization: localStorage.getItem('token') } });

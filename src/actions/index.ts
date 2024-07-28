@@ -110,7 +110,7 @@ export function updateUser(username: string, user: object) {
 
 // Add new game
 // Update user games and user info
-export function addUserGame(userGames: any, username: string, game: Game, review: number | object | undefined) {
+export function addUserGame(userGames: any, username: string, game: Game, review?: number | object | undefined) {
   return async (dispatch: (arg0: { type: string; payload?: any; message?: unknown; }) => void) => {
     try {
       const { user, newGame } = await GameDex.saveGame(username, game, review);
