@@ -47,7 +47,7 @@ export function clearAuthError() {
   };
 }
 
-export function signinUser({ emailOrUsername, password }: SignInParameters) {
+export function signInUser({ emailOrUsername, password }: SignInParameters) {
   // takes in an object with emailOrUsername and password (minimal user object)
   // returns a thunk method that takes dispatch as an argument
   return async (dispatch: (arg0: { type: string; payload?: any; msg?: any; }) => void) => {
@@ -68,7 +68,7 @@ export function signinUser({ emailOrUsername, password }: SignInParameters) {
   };
 }
 
-export function signupUser({ username, email, password }: { username: string; email: string; password: string; }) {
+export function signUpUser({ username, email, password }: { username: string; email: string; password: string; }) {
   // takes in an object with email and password (minimal user object)
   // returns a thunk method that takes dispatch as an argument
   return async (dispatch: (arg0: { type: string; payload?: any; msg?: any; }) => void) => {

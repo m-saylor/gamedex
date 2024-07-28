@@ -1,16 +1,27 @@
-// @ts-nocheck
-
 import React from 'react';
 import { ModalBody, Input } from '@chakra-ui/react';
 
-import PasswordInput from './password-input';
-import { useAuthError } from '../../hooks/redux-hooks';
-// import { AuthModalProps } from '~/utils/props-typing-utils';
+import PasswordInput from './password-input.tsx';
+import { useAuthError } from '../../hooks/redux-hooks.ts';
+
+interface AuthModalInputsProps {
+  email: string;
+  username: string;
+  emailOrUsername: string;
+  password: string;
+  setEmail: (email: string) => void;
+  setPassword: (password: string) => void;
+  setUsername: (username: string) => void;
+  setEmailOrUsername: (emailOrUsername: string) => void;
+  accountStatus: boolean;
+  logInOnEnter: () => void;
+  signUpOnEnter: () => void;
+}
 
 function AuthModalInputs({
   email, username, emailOrUsername, password, setEmail, setPassword,
   accountStatus, setUsername, setEmailOrUsername, logInOnEnter, signUpOnEnter,
-}) {
+}: AuthModalInputsProps) {
   const authError = useAuthError();
 
   // if logging in (account already exists)

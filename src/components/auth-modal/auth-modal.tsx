@@ -1,22 +1,25 @@
-// @ts-nocheck
-
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Modal, ModalOverlay, ModalContent, ModalHeader,
   ModalFooter, ModalCloseButton,
 } from '@chakra-ui/react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
-import { signinUser, signupUser } from '../../actions';
-import AuthModalButtons from './auth-modal-buttons';
-import AuthModalInputs from './auth-modal-inputs';
+import { signInUser, signUpUser } from '../../actions/index.ts';
+import AuthModalButtons from './auth-modal-buttons.tsx';
+import AuthModalInputs from './auth-modal-inputs.tsx';
 import { useOnKeyDown, ENTER_KEY } from '../../hooks/event-hooks';
-// import { AuthModalProps } from '~/utils/props-typing-utils';
+import { useAppDispatch } from '../../hooks/redux-hooks.ts';
+
+interface AuthModalProps {
+  accountStatus: boolean;
+  setAccountStatus: (accountStatus: boolean) => void;
+  isOpen: boolean;
+  onClose: () => void;
+}
 
 function AuthModal(
   {
     isOpen, onClose, accountStatus, setAccountStatus,
-  },
+  }: AuthModalProps,
 ) {
   // state
   const [username, setUsername] = useState('');
@@ -25,8 +28,7 @@ function AuthModal(
   const [emailOrUsername, setEmailOrUsername] = useState('');
 
   // hooks
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   // clear state on close
   useEffect(() => {
@@ -40,13 +42,13 @@ function AuthModal(
 
   // to sign up a user
   const createUser = () => {
-    dispatch(signupUser({ username, email, password }, navigate));
+    dispatch(signUpUser({ username, email, password }));
   };
 
   // to log in a user
   const loginUser = useCallback(() => {
-    dispatch(signinUser({ emailOrUsername, password }, navigate));
-  }, [dispatch, emailOrUsername, navigate, password]);
+    dispatch(signInUser({ emailOrUsername, password }));
+  }, [dispatch, emailOrUsername, password]);
 
   // also log in when the user presses enter
   const logInOnEnter = useOnKeyDown(loginUser, ENTER_KEY);

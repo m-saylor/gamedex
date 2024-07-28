@@ -25,6 +25,7 @@ function PasswordInput({ setPassword, onEnter }: PasswordInputProps) {
       />
       <InputRightElement
         marginTop="5.5px"
+        // @ts-expect-error: size is an unrecognized chakra attribute
         size="sm"
       >
         <IconButton
