@@ -1,14 +1,18 @@
-// @ts-nocheck
-
 import React from 'react';
 import { IconButton } from '@chakra-ui/react';
 import { CheckIcon, AddIcon } from '@chakra-ui/icons';
-import { useUserGames } from '../../hooks/redux-hooks';
+import { useUserGames } from '../../hooks/redux-hooks.ts';
+import { Game } from '../../api/types.ts';
 
-function GameListButton({ onAdd, id }) {
+interface GameListButtonProps {
+  onAdd: () => void;
+  id: number;
+}
+
+function GameListButton({ onAdd, id }: GameListButtonProps) {
   // check if game is in your logged games library
   const userGames = useUserGames();
-  const gameInLibrary = userGames.find((game) => String(game.id) === String(id));
+  const gameInLibrary = userGames.find((game: Game) => String(game.id) === String(id));
 
   // if game is logged, show a check button which can edit the entry
   if (gameInLibrary) {
