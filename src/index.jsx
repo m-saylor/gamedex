@@ -6,7 +6,6 @@ import './style.scss';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 // import { ClerkProvider } from '@clerk/clerk-react';
 import { ActionTypes } from './actions';
 import rootReducer from './reducers';
@@ -40,7 +39,6 @@ root.render(
     <Provider store={store}>
       {/* <ClerkProvider afterSignOutUrl="/" publishableKey={publishableKey}> */}
       <App />
-      <ReactQueryDevtools />
       {/* </ClerkProvider> */}
     </Provider>
   </QueryClientProvider>,

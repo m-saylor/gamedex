@@ -1,6 +1,5 @@
-// @ts-nocheck
-
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import type { AppDispatch, RootState } from '~/reducers';
 
 /**
  * Function will check whether or not a user is signed in
@@ -45,3 +44,6 @@ export function useUserInfo() {
 export function useUserGames() {
   return useSelector((reduxState) => reduxState.user?.userGames);
 }
+
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
+export const useAppSelector = useSelector.withTypes<RootState>();

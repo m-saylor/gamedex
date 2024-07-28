@@ -12,7 +12,7 @@ import { useSelectedGame } from '../../../hooks/search-params-hooks';
 import { Game } from '../../../api/types.ts';
 
 interface TopRatedListProps {
-  topRatedGames: UseQueryResult<Game[], Error>
+  topRatedGames: UseQueryResult<Game[], Error>;
 }
 
 function TopRatedList({ topRatedGames }: TopRatedListProps) {

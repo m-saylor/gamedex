@@ -200,7 +200,7 @@ export async function searchGamesPreviewFromIGDB(searchTerm: string): Promise<Ig
  * @param {*} igdbId - IGDB game id
  * @returns game object
  */
-export async function fetchGameCard(igdbId: string): Promise<Game> {
+export async function fetchGameCard(igdbId: string | null): Promise<Game> {
   const query = `fields name, rating, cover, franchise, genres, summary, release_dates; where id=${igdbId};`;
 
   const games = await fetchGames(query);

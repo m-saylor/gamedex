@@ -1,7 +1,11 @@
 import React from 'react';
 import { CardHeader, Heading } from '@chakra-ui/react';
 
-function RankNumber({ index }: { index: number }) {
+interface RankNumberProps {
+  index: number;
+}
+
+function RankNumber({ index }: RankNumberProps) {
   return (
     <CardHeader>
       <Heading

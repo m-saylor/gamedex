@@ -1,5 +1,5 @@
-// @ts-nocheck
 import axios from 'axios';
+import { Game } from './types.ts';
 
 // API url
 export const GAMEDEX_URL = 'https://video-game-tracker-api.onrender.com/api';
@@ -9,7 +9,7 @@ export const GAMEDEX_URL = 'https://video-game-tracker-api.onrender.com/api';
  * @param {object} fields - username or email, password
  * @returns token and user data if successful
  */
-export async function signin(fields) {
+export async function signIn(fields: object) {
   const response = await axios.post(`${GAMEDEX_URL}/signin`, fields);
   localStorage.setItem('token', response.data.token);
 
@@ -21,7 +21,7 @@ export async function signin(fields) {
  * @param {object} fields - username, email, password
  * @returns token if successful
  */
-export async function signup(fields) {
+export async function signUp(fields: object) {
   const response = await axios.post(`${GAMEDEX_URL}/signup`, fields);
   const { token, user } = response.data;
   return { token, user };
@@ -32,7 +32,7 @@ export async function signup(fields) {
  * @param {string} username
  * @returns true if username is taken, false if not
  */
-export async function fetchUser(username) {
+export async function fetchUser(username: string) {
   try {
     const response = await axios.get(`${GAMEDEX_URL}/users/${username}`);
     return response.data;
@@ -43,10 +43,10 @@ export async function fetchUser(username) {
 
 /**
  * Update user
- * @param {*} user new user object
+ * @param {*} user -> new user object
  * @returns updated user
  */
-export async function updateUser(username, user) {
+export async function updateUser(username: string, user: object) {
   const fields = { user };
   const response = await axios.put(`${GAMEDEX_URL}/users/${username}`, fields, { headers: { authorization: localStorage.getItem('token') } });
   return response.data;
@@ -59,7 +59,7 @@ export async function updateUser(username, user) {
  * @param {object} review
  * @returns game if game is successfuly saved, else throw error
  */
-export async function saveGame(username, game, review) {
+export async function saveGame(username: string, game: Game, review: object) {
   const fields = { username, game, review };
 
   const response = await axios.post(`${GAMEDEX_URL}/users/${username}/games`, fields, { headers: { authorization: localStorage.getItem('token') } });
@@ -82,25 +82,18 @@ export async function loadUser() {
  * @param {string} username
  * @returns array of user's games
  */
-export async function getUserGames(username) {
+export async function getUserGames(username: string) {
   const response = await axios.get(`${GAMEDEX_URL}/users/${username}/games`);
   return Array.from(response.data);
-}
-
-// to be removed
-export async function getGames(id) {
-  const response = await axios.get(`${GAMEDEX_URL}/posts/${id}`);
-  return response.data;
 }
 
 /**
  * Delete a game from a user's logged games
  * @param {string} username
- * @param {object} game
- * @param {object} review
+ * @param {number} game ID
  * @returns user object if game is successfuly deleted, else throw error
  */
-export async function deleteGame(username, gameId) {
+export async function deleteGame(username: string, gameId: number) {
   const response = await axios.delete(`${GAMEDEX_URL}/users/${username}/games`, { headers: { authorization: localStorage.getItem('token') }, data: { gameId } });
   return response.data;
 }
@@ -112,7 +105,7 @@ export async function deleteGame(username, gameId) {
  * @param {object} review
  * @returns game if game is successfuly saved, else throw error
  */
-export async function updateGame(username, game, review) {
+export async function updateGame(username: string, game: Game, review: object) {
   const fields = { username, game, review };
 
   const response = await axios.put(`${GAMEDEX_URL}/users/${username}/games`, fields, { headers: { authorization: localStorage.getItem('token') } });

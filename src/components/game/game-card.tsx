@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Modal, ModalOverlay, ModalContent, ModalBody, ModalCloseButton,
@@ -7,30 +5,36 @@ import {
   Card, CardBody, CardFooter,
   Slider, SliderTrack, SliderFilledTrack, SliderThumb,
 } from '@chakra-ui/react';
-import { useDispatch } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 import {
   addUserGame, deleteUserGame, updateUserGame,
-} from '../../actions';
+} from '../../actions/index';
 import {
   useAuthenticated, useUserGames, useUserInfo,
-} from '../../hooks/redux-hooks';
+  useAppDispatch,
+} from '../../hooks/redux-hooks.ts';
 import GameCardButtons from './game-card-buttons';
 import { fetchGameCard } from '../../api/igdb.ts';
+import { Game } from '../../api/types.ts';
 import { useSelectedGame } from '../../hooks/search-params-hooks';
 
-function GameCard({ openAuthModal, isOpenAuthModal }) {
+interface GameCardProps {
+  openAuthModal: () => void;
+  isOpenAuthModal: boolean;
+}
+
+function GameCard({ openAuthModal, isOpenAuthModal }: GameCardProps) {
   // hooks
-  const dispatch = useDispatch();
   const authenticated = useAuthenticated(); // to check if user is signed in
   const userInfo = useUserInfo();
   const userGames = useUserGames();
+  const dispatch = useAppDispatch();
 
   // provides functionality for retrieving and clearing the selected game in the URL
   const { selectedGame, clearSelectedGame } = useSelectedGame();
 
   // query
-  const { data: game } = useQuery({ queryKey: ['selectedGame', selectedGame], queryFn: () => fetchGameCard(selectedGame), enabled: selectedGame !== undefined });
+  const { data: game } = useQuery({ queryKey: ['selectedGame', selectedGame], queryFn: () => fetchGameCard(selectedGame), enabled: selectedGame !== null });
 
   // state
   const [userRating, setUserRating] = useState(0);
@@ -43,7 +47,7 @@ function GameCard({ openAuthModal, isOpenAuthModal }) {
   const title = game?.name;
   const avgRating = game?.avgRating?.toFixed(2); // avg rating rounded to two decimals
   const id = game?.id;
-  const gameInLibrary = userGames.find((savedGame) => String(savedGame.id) === String(id));
+  const gameInLibrary = userGames.find((savedGame: Game) => String(savedGame.id) === String(id));
 
   // render the edit mode of the game card
   useEffect(() => {
@@ -77,7 +81,7 @@ function GameCard({ openAuthModal, isOpenAuthModal }) {
       name: game?.name,
       coverUrl: game?.coverUrl,
       summary: game?.summary,
-      releaseYear: game?.year,
+      releaseYear: game?.firstYear,
       avgRating,
 
     };
@@ -92,7 +96,7 @@ function GameCard({ openAuthModal, isOpenAuthModal }) {
       dispatch(addUserGame(userGames, username, savedGame, userRating));
       onCloseGame();
     }
-  }, [id, game?.name, game?.coverUrl, game?.summary, game?.year, avgRating, authenticated, userRating, openAuthModal, dispatch, userGames, username, onCloseGame]);
+  }, [id, game?.name, game?.coverUrl, game?.summary, game?.firstYear, avgRating, authenticated, userRating, openAuthModal, dispatch, userGames, username, onCloseGame]);
 
   // delete the game and data from a user
   const onDeleteGame = useCallback(
@@ -150,7 +154,7 @@ function GameCard({ openAuthModal, isOpenAuthModal }) {
                 mt="10px"
                 textAlign="center"
               >
-                {game.year}
+                {game.firstYear}
               </Text>
               <CardBody
                 alignItems="center"

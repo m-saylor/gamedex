@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import * as GameDex from '../api/gamedex';
+import * as GameDex from '../api/gamedex.ts';
 import { signUpSuccess, signInSuccess } from '../utils/text-utils';
 
 // keys for actiontypes
@@ -82,7 +82,7 @@ export function signinUser({ emailOrUsername, password }) {
       const fields = {
         emailOrUsername, password,
       };
-      const { token, user } = await GameDex.signin(fields);
+      const { token, user } = await GameDex.signIn(fields);
       const games = await GameDex.getUserGames(user.username);
       dispatch({ type: ActionTypes.AUTH_USER, payload: signInSuccess });
       dispatch({ type: ActionTypes.FETCH_USER_INFO, payload: user });
@@ -103,7 +103,7 @@ export function signupUser({ username, email, password }, navigate) {
       const fields = {
         username, email, password,
       };
-      const { token, user } = await GameDex.signup(fields);
+      const { token, user } = await GameDex.signUp(fields);
       localStorage.setItem('token', token);
       dispatch({ type: ActionTypes.AUTH_USER, payload: signUpSuccess });
       dispatch({ type: ActionTypes.FETCH_USER_INFO, payload: user });
