@@ -1,18 +1,21 @@
-// @ts-nocheck
-
 import React, { useEffect } from 'react';
 import {
   Card, CardBody, CardFooter, Image, Stack, Heading, Text,
   Progress,
 } from '@chakra-ui/react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import { alternateCardColor } from '../../../utils/style-utils';
 import GameListButton from '../../game/game-list-button';
 import RankNumber from './rank-number.tsx';
 import TopRatedSkeleton from './top-rated-skeleton.tsx';
 import { useSelectedGame } from '../../../hooks/search-params-hooks';
+import { Game } from '../../../api/types.ts';
 
-function TopRatedList({ topRatedGames }) {
+interface TopRatedListProps {
+  topRatedGames: UseQueryResult<Game[], Error>
+}
+
+function TopRatedList({ topRatedGames }: TopRatedListProps) {
   // queries for the top 100 rated games from IGDB
   const queryClient = useQueryClient();
   const gamesData = topRatedGames?.data;
@@ -30,12 +33,12 @@ function TopRatedList({ topRatedGames }) {
   const { setSelectedGame } = useSelectedGame();
 
   // renders a skeleton loading state
-  if (topRatedGames.isLoading) {
+  if (topRatedGames.isLoading || !gamesData) {
     return <TopRatedSkeleton />;
   }
 
-  const renderedGames = gamesData?.map((game, index) => {
-    const title = game.name.toUpperCase();
+  const renderedGames = gamesData.map((game, index) => {
+    const title = game?.name?.toUpperCase();
     const displayAvgRating = game.avgRating?.toFixed(2);
     return (
       <Card

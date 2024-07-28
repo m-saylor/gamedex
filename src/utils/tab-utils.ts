@@ -1,3 +1,5 @@
+export type TabName = 'trending' | 'topRated';
+
 export const browseTabNameToIndex = {
   trending: 0,
   topRated: 1,

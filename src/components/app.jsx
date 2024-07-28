@@ -7,7 +7,7 @@ import {
 import { ChakraProvider, useDisclosure } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 import NavBar from './nav-bar/nav-bar';
-import BrowseGames from './browse-games/browse-games';
+import BrowseGames from './browse-games/browse-games.tsx';
 import RequireAuth from './require-auth';
 import Results from './search-results/results';
 import AuthModal from './auth-modal/auth-modal';

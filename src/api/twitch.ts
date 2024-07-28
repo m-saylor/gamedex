@@ -12,7 +12,7 @@ const TWITCH_TOP_GAMES_URL = 'https://api.twitch.tv/helix/games/top?first=100';
 const TRENDING_GAMES_LENGTH = 78;
 
 // Exclude Virtual Casino, I'm Only Sleeping, VR Chat, and no covers
-const EXCLUDED_GAME_IDS = ['45517', '71001', '33615', '290049'];
+const EXCLUDED_GAME_IDS = ['45517', '71001', '33615', '290049', '87123', '229788'];
 
 function includeGame(game: TwitchGame) {
   if (game.igdb_id === '' || game.box_art_url === '') {

@@ -1,6 +1,3 @@
-// @ts-nocheck
-
-/* eslint-disable react/jsx-props-no-spreading */
 import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
@@ -39,18 +36,18 @@ function TrendingGames() {
   const { selectedGame, setSelectedGame } = useSelectedGame();
 
   // implements and times out the hover effect
-  const hoverTimeoutRef = useRef();
-  const [hoveredGameIdx, setHoveredGameIdx] = useState(null);
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>();
+  const [hoveredGameIdx, setHoveredGameIdx] = useState<number | undefined>(undefined);
 
-  const onMouseEnterGridItem = useCallback((gameIdx) => {
+  const onMouseEnterGridItem = useCallback((gameIdx: number) => {
     hoverTimeoutRef.current = setTimeout(() => {
       setHoveredGameIdx(gameIdx);
     }, 10);
   }, []);
 
   const onMouseLeaveGridItem = useCallback(() => {
-    setHoveredGameIdx(null);
-    clearTimeout(hoverTimeoutRef);
+    setHoveredGameIdx(undefined);
+    clearTimeout(hoverTimeoutRef.current);
   }, []);
 
   function renderTrendingGames() {
@@ -59,11 +56,11 @@ function TrendingGames() {
     for (let idx = 0; idx < 78; idx += 1) {
       const span = getSpan(idx);
       const gameIdx = TILE_INDEX_TO_GAME_INDEX[idx];
-      const game = twitchData?.[gameIdx];
+      const game = gameIdx ? twitchData?.[gameIdx] : undefined;
       const gameStyles = getTrendingGameStyles(gameIdx, hoveredGameIdx, selectedGame);
       const isLoading = !game || trendingTwitch.isLoading;
 
-      if (game) {
+      if (game && gameIdx !== undefined) {
         renderedGames.push(
           <GridItem
             colSpan={span}

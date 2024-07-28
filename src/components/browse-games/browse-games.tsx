@@ -1,16 +1,14 @@
-// @ts-nocheck
-
 import React, { useState } from 'react';
 import {
   Tabs, TabList, TabPanels, Tab, TabPanel,
 } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import JumpToTop from '../jump-to-top.tsx';
-import TopRatedList from './top-rated/top-rated-list';
-import TrendingGames from './trending/trending';
+import TopRatedList from './top-rated/top-rated-list.tsx';
+import TrendingGames from './trending/trending.tsx';
 import { fetchTopRatedGames } from '../../api/igdb.ts';
 import { useSelectedTab } from '../../hooks/search-params-hooks';
-import { browseTabNameToIndex, browseTabNames } from '../../utils/tab-utils';
+import { TabName, browseTabNameToIndex, browseTabNames } from '../../utils/tab-utils.ts';
 
 function BrowseGames() {
   // preloads data for the top rated games tab
@@ -20,9 +18,9 @@ function BrowseGames() {
   const { selectedTab, setSelectedTab } = useSelectedTab();
 
   // provides controlled tab functionality
-  const [tabIndex, setTabIndex] = useState(browseTabNameToIndex[selectedTab] ?? 0);
+  const [tabIndex, setTabIndex] = useState<number>(selectedTab ? browseTabNameToIndex[selectedTab as TabName] : 0);
 
-  const handleTabsChange = (index) => {
+  const handleTabsChange = (index: number) => {
     setTabIndex(index);
     setSelectedTab(browseTabNames[index]);
   };
