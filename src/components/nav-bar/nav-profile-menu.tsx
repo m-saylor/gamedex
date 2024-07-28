@@ -1,13 +1,19 @@
-// @ts-nocheck
-
 import React from 'react';
 import {
   Menu, MenuButton, Button, Avatar, MenuList, Center, MenuDivider, MenuItem,
 } from '@chakra-ui/react';
 
+interface NavProfileMenuProps {
+  username: string;
+  handleBrowseGames: () => void;
+  signOut: () => void;
+  handleYourProfile: () => void;
+  handleSettings: () => void;
+}
+
 function NavProfileMenu({
   handleBrowseGames, signOut, username, handleYourProfile, handleSettings,
-}) {
+}: NavProfileMenuProps) {
   return (
     <Menu className="profile-menu">
       <MenuButton
